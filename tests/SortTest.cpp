@@ -47,6 +47,13 @@ TEST_P(SortTest, MergeSort) {
 	ASSERT_THAT(data, IsSorted());
 }
 
+TEST_P(SortTest, QuickSort) {
+	auto data = GetParam();
+	quickSort(data);
+
+	ASSERT_THAT(data, IsSorted());
+}
+
 INSTANTIATE_TEST_SUITE_P(, SortTest, testing::Values(
 	DataSample({ }), // empty sequence
 	DataSample({ 10 }), // sequence with only one element

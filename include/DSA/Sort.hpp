@@ -111,4 +111,47 @@ void mergeSort(R&& range) {
 	merge(left, right);
 }
 
+
+
+/**
+ * @brief Sorts a range of values in O(n * lg n) time.
+ */
+template <std::ranges::random_access_range R>
+	requires std::sortable<std::ranges::iterator_t<R>>
+void quickSort(R&& range) {
+	// if the range contains only one element or no elements at all, there is nothing to sort
+	if(std::ranges::size(range) <= 1) {
+		return;
+	}
+
+	// temporary storage for values less than and greater that or equal to the pivot
+	std::vector<std::ranges::range_value_t<R>> less;
+	std::vector<std::ranges::range_value_t<R>> greater;
+
+	// find the pivot point for the range
+	const auto pivotIt = range.begin() + std::ranges::size(range) / 2;
+	auto pivot = std::move(*pivotIt);
+
+	for(auto it = range.begin(); it != range.end(); it++) {
+		// skip pivot point position
+		if(it == pivotIt) {
+			continue;
+		}
+
+		if(*it < pivot) {
+			less.push_back(std::move(*it));
+		} else {
+			greater.push_back(std::move(*it));
+		}
+	}
+
+	quickSort(less);
+	quickSort(greater);
+
+	// move sorted subsequences into the original range
+	const auto outIt = std::ranges::move(less, range.begin()).out;
+	*outIt = std::move(pivot);
+	std::ranges::move(greater, outIt + 1);
+}
+
 #endif
