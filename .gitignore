@@ -1,7 +1,8 @@
-# Ignore build directories
+# Build directories
 build/
 out/
 
 # Visual Studio files
-.vscode/
-.vs/
+CMakeSettings.json
+.vscode
+.vs
