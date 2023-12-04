@@ -1,5 +1,4 @@
-﻿cmake_minimum_required(VERSION 3.14)
-project(DSA LANGUAGES CXX DESCRIPTION "Data structures and algorithms" VERSION 0.1)
+﻿cmake_minimum_required(VERSION 3.23)
 
 if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
 	include(CTest)
