@@ -1,7 +1,7 @@
-#include <DSA/Search.hpp>
-
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
+
+#include <DSA/Search.hpp>
 
 #include <algorithm>
 #include <vector>
@@ -16,7 +16,7 @@ TEST_P(SearchTest, LinearSearch) {
 	const auto& searchValue = std::get<0>(GetParam());
 	const auto& data = std::get<1>(GetParam());
 	
-	const auto valueFound = linearSearch(data, searchValue);
+	const auto valueFound = dsa::linearSearch(data, searchValue);
 	if(valueFound != data.cend()) {
 		ASSERT_EQ(*valueFound, searchValue);
 	} else {
@@ -29,7 +29,7 @@ TEST_P(SearchTest, BinarySearch) {
 	auto data = std::get<1>(GetParam());
 	std::ranges::sort(data);
 
-	const auto valueFound = binarySearch(data, searchValue);
+	const auto valueFound = dsa::binarySearch(data, searchValue);
 	if(valueFound != data.end()) {
 		ASSERT_EQ(*valueFound, searchValue);
 	} else {

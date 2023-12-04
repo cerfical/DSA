@@ -1,7 +1,7 @@
-#include <DSA/Sort.hpp>
-
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
+
+#include <DSA/Sort.hpp>
 
 #include <algorithm>
 #include <vector>
@@ -21,35 +21,35 @@ using SortTest = testing::TestWithParam<DataSample>;
 
 TEST_P(SortTest, BubbleSort) {
 	auto data = GetParam();
-	bubbleSort(data);
+	dsa::bubbleSort(data);
 
 	ASSERT_THAT(data, IsSorted());
 }
 
 TEST_P(SortTest, SelectionSort) {
 	auto data = GetParam();
-	selectionSort(data);
+	dsa::selectionSort(data);
 	
 	ASSERT_THAT(data, IsSorted());
 }
 
 TEST_P(SortTest, InsertionSort) {
 	auto data = GetParam();
-	insertionSort(data);
+	dsa::insertionSort(data);
 	
 	ASSERT_THAT(data, IsSorted());
 }
 
 TEST_P(SortTest, MergeSort) {
 	auto data = GetParam();
-	mergeSort(data);
+	dsa::mergeSort(data);
 	
 	ASSERT_THAT(data, IsSorted());
 }
 
 TEST_P(SortTest, QuickSort) {
 	auto data = GetParam();
-	quickSort(data);
+	dsa::quickSort(data);
 
 	ASSERT_THAT(data, IsSorted());
 }
