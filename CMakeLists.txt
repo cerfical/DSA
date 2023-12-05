@@ -11,6 +11,7 @@ target_sources(dsa INTERFACE FILE_SET HEADERS BASE_DIRS "include"
 	FILES
 		"include/DSA/Sort.hpp"
 		"include/DSA/Search.hpp"
+		"include/DSA/List.hpp"
 )
 
 target_include_directories(dsa INTERFACE "include")
