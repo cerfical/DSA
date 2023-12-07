@@ -1,65 +1,96 @@
 #include <gtest/gtest.h>
-#include <gmock/gmock.h>
-
 #include <DSA/Sort.hpp>
 
 #include <algorithm>
 #include <vector>
 
-MATCHER(IsSorted, negation ? "unsorted container" : "sorted container") {
-	if(std::ranges::is_sorted(arg)) {
-		*result_listener << "whose elements are in order";
-		return true;
-	} else {
-		*result_listener << "whose elements are out of order";
-		return false;
+
+
+struct BubbleSort {
+	template <typename R> void operator()(R&& data) const {
+		dsa::bubbleSort(std::forward<R>(data));
 	}
+};
+
+struct SelectionSort {
+	template <typename R> void operator()(R&& data) const {
+		dsa::selectionSort(std::forward<R>(data));
+	}
+};
+
+struct InsertionSort {
+	template <typename R> void operator()(R&& data) const {
+		dsa::insertionSort(std::forward<R>(data));
+	}
+};
+
+struct MergeSort {
+	template <typename R> void operator()(R&& data) const {
+		dsa::mergeSort(std::forward<R>(data));
+	}
+};
+
+struct QuickSort {
+	template <typename R> void operator()(R&& data) const {
+		dsa::quickSort(std::forward<R>(data));
+	}
+};
+
+
+
+using SortAlgos = testing::Types<BubbleSort, SelectionSort, InsertionSort, MergeSort, QuickSort>;
+
+template <typename SortAlgo>
+class SortTests : public testing::Test {
+protected:
+
+	void sortAndEnsureSorted(std::vector<int> data) {
+		SortAlgo()(data);
+		ASSERT_TRUE(std::ranges::is_sorted(data));
+	}
+
+};
+
+TYPED_TEST_SUITE(SortTests, SortAlgos);
+
+
+
+TYPED_TEST(SortTests, emptySequence) {
+	this->sortAndEnsureSorted({});
 }
 
-using DataSample = std::vector<int>;
-using SortTest = testing::TestWithParam<DataSample>;
-
-TEST_P(SortTest, BubbleSort) {
-	auto data = GetParam();
-	dsa::bubbleSort(data);
-
-	ASSERT_THAT(data, IsSorted());
+TYPED_TEST(SortTests, singleElementSequence) {
+	this->sortAndEnsureSorted({ 15 });
 }
 
-TEST_P(SortTest, SelectionSort) {
-	auto data = GetParam();
-	dsa::selectionSort(data);
-	
-	ASSERT_THAT(data, IsSorted());
+TYPED_TEST(SortTests, twoElementSequence) {
+	this->sortAndEnsureSorted({ 2, 1 });
 }
 
-TEST_P(SortTest, InsertionSort) {
-	auto data = GetParam();
-	dsa::insertionSort(data);
-	
-	ASSERT_THAT(data, IsSorted());
+
+
+TYPED_TEST(SortTests, sortedSequenceWithUniqueElements) {
+	this->sortAndEnsureSorted({ -15, -14, -13, -10, 0, 2, 5, 12, 13, 15, 18 });
 }
 
-TEST_P(SortTest, MergeSort) {
-	auto data = GetParam();
-	dsa::mergeSort(data);
-	
-	ASSERT_THAT(data, IsSorted());
+TYPED_TEST(SortTests, reverseSortedSequenceWithUniqueElements) {
+	this->sortAndEnsureSorted({ 16, 9, 8, 5, 4, 0, -1, -5, -7, -10, -12, -14 });
 }
 
-TEST_P(SortTest, QuickSort) {
-	auto data = GetParam();
-	dsa::quickSort(data);
-
-	ASSERT_THAT(data, IsSorted());
+TYPED_TEST(SortTests, unsortedSequenceWithUniqueElements) {
+	this->sortAndEnsureSorted({ -10, 0, 3, 5, 10, 15, -12, 12, 2, 6, 11 });
 }
 
-INSTANTIATE_TEST_SUITE_P(, SortTest, testing::Values(
-	DataSample({ }), // empty sequence
-	DataSample({ 10 }), // sequence with only one element
-	DataSample({ 15, -10 }), // two elements
-	DataSample({ -10, 0, 100 }), // three elements
-	DataSample({ -10, 0, 0, 15, 100, 150, -125, 125, 125, 0, 10 }), // elements in random order
-	DataSample({ -150, -150, -15, -10, 0, 0, 50, 120, 130, 135 }), // sorted elements
-	DataSample({ 100, 90, 90, 85, 15, 0, 0, -5, -5, -10, -75, -330 }) // elements sorted in reverse order
-));
+
+
+TYPED_TEST(SortTests, sortedSequenceWithRepetitions) {
+	this->sortAndEnsureSorted({ -19, -19, -18, -17, -1, 0, 0, 10, 12, 12, 13, 15 });
+}
+
+TYPED_TEST(SortTests, reverseSortedSequenceWithRepetitions) {
+	this->sortAndEnsureSorted({ 20, 19, 17, 10, 9, 9, 1, 1, 0, 0, -1, -1, -10, -12, -13, -13 });
+}
+
+TYPED_TEST(SortTests, unsortedSequenceWithRepetitions) {
+	this->sortAndEnsureSorted({ 10, 20, 35, 35, 10, 0, -10, -15, -15, 0, 20, 35, 35, 10, -12 });
+}
