@@ -7,35 +7,18 @@
 
 
 
-template <typename SearchAlgo>
-class SearchTests : public testing::Test {
-protected:
-
-	void search(std::vector<int> values, int searchValue) {
-		const auto it = SearchAlgo()(values, searchValue);
-		if(it != values.cend()) {
-			found = *it;
-		} else {
-			found = {};
-		}
-	}
-
-	std::optional<int> found;
-
-};
-
-
-
 struct LinearSearch {
-	auto operator()(std::vector<int>& values, int searchValue) const {
-		return dsa::linearSearch(values, searchValue);
+	template <typename R, typename T>
+	auto operator()(R&& values, T&& searchValue) const {
+		return dsa::linearSearch(std::forward<R>(values), std::forward<T>(searchValue));
 	}
 };
 
 struct BinarySearch {
-	auto operator()(std::vector<int>& values, int searchValue) const {
-		std::ranges::sort(values);
-		return dsa::binarySearch(values, searchValue);
+	template <typename R, typename T>
+	auto operator()(R&& values, T&& searchValue) const {
+		std::ranges::sort(std::forward<R>(values));
+		return dsa::binarySearch(std::forward<R>(values), std::forward<T>(searchValue));
 	}
 };
 
@@ -43,48 +26,59 @@ struct BinarySearch {
 
 using SearchAlgos = testing::Types<LinearSearch, BinarySearch>;
 
+template <typename SearchAlgo>
+class SearchTests : public testing::Test {
+protected:
+
+	void searchAndEnsureFound(std::vector<int> values, int searchValue) {
+		const auto foundValue = search(values, searchValue);
+
+		ASSERT_TRUE(foundValue.has_value());
+		ASSERT_EQ(foundValue.value(), searchValue);
+	}
+
+	void searchAndEnsureNotFound(std::vector<int> values, int searchValue) {
+		const auto foundValue = search(values, searchValue);
+		ASSERT_TRUE(!foundValue.has_value());
+	}
+
+private:
+
+	std::optional<int> search(std::vector<int>& values, int searchValue) {
+		const auto it = SearchAlgo()(values, searchValue);
+		if(it != values.cend()) {
+			return *it;
+		}
+		return {};
+	}
+
+};
+
 TYPED_TEST_SUITE(SearchTests, SearchAlgos);
 
 
 
 TYPED_TEST(SearchTests, searchOnEmptySequence) {
-	this->search({}, 0);
-	ASSERT_TRUE(!this->found.has_value());
+	this->searchAndEnsureNotFound({}, 0);
 }
-
 
 TYPED_TEST(SearchTests, searchOnSingleElementSequence) {
-	this->search({ 10 }, 10);
-	ASSERT_TRUE(this->found.has_value());
-	ASSERT_EQ(this->found.value(), 10);
-
-	this->search({ 20 }, 30);
-	ASSERT_TRUE(!this->found.has_value());
+	this->searchAndEnsureFound({ 10 }, 10);
+	this->searchAndEnsureNotFound({ 20 }, 30);
 }
-
 
 TYPED_TEST(SearchTests, firstElementSearch) {
-	this->search({ 50, 65, 0, 0, 35, 145, -100, -15, 100, -100, 200 }, 50);
-	ASSERT_TRUE(this->found.has_value());
-	ASSERT_EQ(this->found.value(), 50);
+	this->searchAndEnsureFound({ 50, 65, 0, 0, 35, 145, -100, -15, 100, -100, 200 }, 50);
 }
-
 
 TYPED_TEST(SearchTests, lastElementSearch) {
-	this->search({ 80, 75, -10, 20, 50, -60, -70, 75, 45, -10, -15, -10 }, -10);
-	ASSERT_TRUE(this->found.has_value());
-	ASSERT_EQ(this->found.value(), -10);
+	this->searchAndEnsureFound({ 80, 75, -10, 20, 50, -60, -70, 75, 45, -10, -15, -10 }, -10);
 }
-
 
 TYPED_TEST(SearchTests, randomElementSearch) {
-	this->search({ -51, -15, -13, -5, -57, 0, 45, 70, 0, 20, 15, 30, 9 }, -5);
-	ASSERT_TRUE(this->found.has_value());
-	ASSERT_EQ(this->found.value(), -5);
+	this->searchAndEnsureFound({ -51, -15, -13, -5, -57, 0, 45, 70, 0, 20, 15, 30, 9 }, -5);
 }
 
-
 TYPED_TEST(SearchTests, absentElementSearch) {
-	this->search({ -2, -32, 0, 4, 100, 20, 345, 2, 203, 4, 5, 10, 12 }, -1000);
-	ASSERT_TRUE(!this->found.has_value());
+	this->searchAndEnsureNotFound({ -2, -32, 0, 4, 100, 20, 345, 2, 203, 4, 5, 10, 12 }, -1000);
 }
