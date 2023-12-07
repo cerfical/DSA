@@ -10,10 +10,10 @@ namespace dsa {
 	/**
 	 * @brief Performs a search on a range of values in O(n) time.
 	 */
-	template <std::ranges::random_access_range R, typename T>
-	auto linearSearch(R&& range, T&& value) {
+	template <std::ranges::forward_range R, typename T>
+	auto linearSearch(R&& range, T&& searchValue) {
 		for(auto it = range.begin(); it != range.end(); it++) {
-			if(*it == value) {
+			if(*it == searchValue) {
 				return it;
 			}
 		}
@@ -25,26 +25,27 @@ namespace dsa {
 	/**
 	 * @brief Performs a search on a sorted range of values in O(lg n) time.
 	 */
-	template <std::ranges::random_access_range R, typename T>
-	auto binarySearch(R&& range, T&& value) {
-		const auto search = [&](auto self, auto&& subrange) {
-			if(std::ranges::empty(subrange)) {
-				return range.end();
-			}
+	template <std::ranges::forward_range R, typename T>
+	auto binarySearch(R&& range, T&& searchValue) {
+		auto left = range.begin();
+		auto right = range.end();
 
-			// calculate the midpoint
-			auto mid = subrange.begin() + std::ranges::distance(subrange) / 2;
-			if(*mid == value) {
+		while(left != right) {
+			const auto mid = left + std::distance(left, right) / 2;
+			const auto& value = *mid;
+
+			if(value == searchValue) {
 				return mid;
 			}
 
-			if(*mid > value) {
-				return self(self, std::ranges::subrange(subrange.begin(), mid));
-			} else {
-				return self(self, std::ranges::subrange(mid + 1, subrange.end()));
+			if(value > searchValue) {
+				right = mid;
+			} else if(value < searchValue) {
+				left = mid + 1;
 			}
-		};
-		return search(search, std::forward<R>(range));
+		}
+
+		return range.end();
 	}
 
 }
