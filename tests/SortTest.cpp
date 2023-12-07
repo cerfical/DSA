@@ -45,8 +45,11 @@ class SortTests : public testing::Test {
 protected:
 
 	void sortAndEnsureSorted(std::vector<int> data) {
+		auto sortedData = data;
+		std::ranges::sort(sortedData);
 		SortAlgo()(data);
-		ASSERT_TRUE(std::ranges::is_sorted(data));
+
+		ASSERT_EQ(data, sortedData);
 	}
 
 };
@@ -65,6 +68,29 @@ TYPED_TEST(SortTests, singleElementSequence) {
 
 TYPED_TEST(SortTests, twoElementSequence) {
 	this->sortAndEnsureSorted({ 2, 1 });
+	this->sortAndEnsureSorted({ 1, 2 });
+	this->sortAndEnsureSorted({ 1, 1 });
+}
+
+TYPED_TEST(SortTests, threeElementSequence) {
+	// unique elements
+	this->sortAndEnsureSorted({ 1, 2, 3 });
+	this->sortAndEnsureSorted({ 1, 3, 2 });
+	this->sortAndEnsureSorted({ 2, 1, 3 });
+	this->sortAndEnsureSorted({ 2, 3, 1 });
+	this->sortAndEnsureSorted({ 3, 2, 1 });
+	this->sortAndEnsureSorted({ 3, 1, 2 });
+
+	// non-unique elements
+	this->sortAndEnsureSorted({ 2, 1, 1 });
+	this->sortAndEnsureSorted({ 1, 2, 1 });
+	this->sortAndEnsureSorted({ 1, 1, 2 });
+
+	this->sortAndEnsureSorted({ 1, 2, 2 });
+	this->sortAndEnsureSorted({ 2, 1, 2 });
+	this->sortAndEnsureSorted({ 2, 2, 1 });
+
+	this->sortAndEnsureSorted({ 2, 2, 2 });
 }
 
 
