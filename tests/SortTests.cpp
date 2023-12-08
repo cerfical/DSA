@@ -24,6 +24,8 @@ struct InsertionSort {
 	}
 };
 
+
+
 struct MergeSort {
 	template <typename R> void operator()(R&& data) const {
 		dsa::mergeSort(std::forward<R>(data));
@@ -36,9 +38,15 @@ struct QuickSort {
 	}
 };
 
+struct HeapSort {
+	template <typename R> void operator()(R&& data) const {
+		dsa::heapSort(std::forward<R>(data));
+	}
+};
 
 
-using SortAlgos = testing::Types<BubbleSort, SelectionSort, InsertionSort, MergeSort, QuickSort>;
+
+using SortAlgos = testing::Types<BubbleSort, SelectionSort, InsertionSort, MergeSort, QuickSort, HeapSort>;
 
 template <typename SortAlgo>
 class SortTests : public testing::Test {

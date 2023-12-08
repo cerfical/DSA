@@ -6,6 +6,8 @@
 #include <ranges>
 #include <vector>
 
+#include "HeapUtils.hpp"
+
 namespace dsa {
 
 	/**
@@ -143,6 +145,26 @@ namespace dsa {
 		
 		std::ranges::move_backward(greater, range.end());
 		*greaterPos = std::move(pivot);
+	}
+
+
+
+	/**
+	 * @brief Sorts a range of values in O(n * lg n).
+	 */
+	template <std::ranges::random_access_range R>
+	void heapSort(R&& range) {
+		HeapUtils::createHeap(range);
+
+		const auto heapStart = std::ranges::begin(range);
+		auto heapEnd = std::ranges::end(range);
+
+		while(heapEnd != heapStart) {
+			auto value = HeapUtils::extractTop(std::ranges::subrange(heapStart, heapEnd));
+			heapEnd--;
+
+			*heapEnd = std::move(value);
+		}
 	}
 
 }
