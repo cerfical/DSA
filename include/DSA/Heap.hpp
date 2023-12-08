@@ -26,16 +26,18 @@ namespace dsa {
 		}
 
 		void push(const T& value) {
-			insertValue(value);
+			m_data.push_back(value);
+			HeapUtils::insertLast(m_data);
 		}
 
 		void push(T&& value) {
-			insertValue(std::move(value));
+			m_data.push_back(std::move(value));
+			HeapUtils::insertLast(m_data);
 		}
 
 		T pop() {
-			auto value = popAndReplaceTop();
-			HeapUtils::heapify(m_data, 0);
+			auto value = HeapUtils::extractTop(m_data);
+			m_data.pop_back();
 			return value;
 		}
 
@@ -50,28 +52,7 @@ namespace dsa {
 
 
 	private:
-
-		template <typename S>
-		void insertValue(S&& value) {
-			m_data.push_back(std::forward<S>(value));
-
-			auto n = m_data.size() - 1;
-			while(n != 0 && m_data[n] < m_data[HeapUtils::parentOf(n)]) {
-				std::swap(m_data[n], m_data[HeapUtils::parentOf(n)]);
-				n = HeapUtils::parentOf(n);
-			}
-		}
-
-		T popAndReplaceTop() {
-			auto value = std::exchange(m_data.front(), std::move(m_data.back()));
-			m_data.pop_back();
-			
-			return value;
-		}
-
-
 		std::vector<T> m_data;
-
 	};
 }
 
