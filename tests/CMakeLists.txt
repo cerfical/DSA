@@ -3,9 +3,9 @@ include(GoogleTest)
 
 
 add_executable(dsa-tests
-	"SearchTest.cpp"
-	"SortTest.cpp"
-	"ListTest.cpp"
+	"SearchTests.cpp"
+	"SortTests.cpp"
+	"ListTests.cpp"
 )
 
 target_link_libraries(dsa-tests
