@@ -1,12 +1,14 @@
 find_package(GTest REQUIRED)
 include(GoogleTest)
 
-
 add_executable(dsa-tests
 	"SearchTests.cpp"
 	"SortTests.cpp"
+
 	"ListTests.cpp"
 	"HeapTests.cpp"
+
+	"HeapUtilsTests.cpp"
 )
 
 target_link_libraries(dsa-tests
@@ -15,6 +17,5 @@ target_link_libraries(dsa-tests
 	PRIVATE GTest::gmock
 	PRIVATE dsa
 )
-
 
 gtest_discover_tests(dsa-tests)

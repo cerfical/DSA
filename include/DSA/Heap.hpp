@@ -1,6 +1,7 @@
 #ifndef DSA_HEAP_HEADER
 #define DSA_HEAP_HEADER
 
+#include "HeapUtils.hpp"
 #include <vector>
 
 namespace dsa {
@@ -34,7 +35,7 @@ namespace dsa {
 
 		T pop() {
 			auto value = popAndReplaceTop();
-			heapify(0);
+			HeapUtils::heapify(m_data, 0);
 			return value;
 		}
 
@@ -55,9 +56,9 @@ namespace dsa {
 			m_data.push_back(std::forward<S>(value));
 
 			auto n = m_data.size() - 1;
-			while(n != 0 && m_data[n] < m_data[parentOf(n)]) {
-				std::swap(m_data[n], m_data[parentOf(n)]);
-				n = parentOf(n);
+			while(n != 0 && m_data[n] < m_data[HeapUtils::parentOf(n)]) {
+				std::swap(m_data[n], m_data[HeapUtils::parentOf(n)]);
+				n = HeapUtils::parentOf(n);
 			}
 		}
 
@@ -67,42 +68,6 @@ namespace dsa {
 			
 			return value;
 		}
-
-		void heapify(std::size_t n) {
-			auto min = n;
-			while((min = smallerChildOrNode(n)) != n) {
-				std::swap(m_data[n], m_data[min]);
-				n = min;
-			}
-		}
-
-
-
-		std::size_t parentOf(std::size_t n) const noexcept {
-			return (n - 1) / 2;
-		}
-
-		std::size_t leftChildOf(std::size_t n) const noexcept {
-			return n * 2 + 1;
-		}
-
-		std::size_t rightChildOf(std::size_t n) const noexcept {
-			return n * 2 + 2;
-		}
-
-
-
-		std::size_t smallerChildOrNode(std::size_t n) const noexcept {
-			return minimum(minimum(n, leftChildOf(n)), rightChildOf(n));
-		}
-
-		std::size_t minimum(std::size_t n, std::size_t child) const noexcept {
-			if(child < m_data.size() && m_data[child] < m_data[n]) {
-				return child;
-			}
-			return n;
-		}
-
 
 
 		std::vector<T> m_data;
