@@ -6,7 +6,7 @@
 
 namespace dsa {
 	/**
-	 * @brief Implements a fast queue that gives priority to 'smaller' elements first.
+	 * @brief Implements a fast queue that gives priority to 'larger' elements first.
 	 */
 	template <typename T>
 	class Heap {

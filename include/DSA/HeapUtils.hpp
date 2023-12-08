@@ -13,7 +13,7 @@ namespace dsa {
 		/** @name Heap management functions */
 		/** @{ */
 		/**
-		 * @brief Builds a min-heap in a range that allows random access to its elements.
+		 * @brief Builds a max-heap in a range that allows random access to its elements.
 		 */
 		template <std::ranges::random_access_range R>
 		static void createHeap(R&& range) {
@@ -25,7 +25,7 @@ namespace dsa {
 			auto n = parentOf(size - 1) + 1;
 			while(n != 0) {
 				n--;
-				heapify(std::forward<R>(range), n);
+				heapify(range, n);
 			}
 		}
 
@@ -36,7 +36,7 @@ namespace dsa {
 		template <std::ranges::random_access_range R>
 		static void insertLast(R&& range) {
 			auto n = std::ranges::size(range) - 1;
-			while(n != 0 && range[n] < range[parentOf(n)]) {
+			while(n != 0 && range[parentOf(n)] < range[n]) {
 				std::swap(range[n], range[parentOf(n)]);
 				n = parentOf(n);
 			}
@@ -48,8 +48,8 @@ namespace dsa {
 		 */
 		template <std::ranges::random_access_range R>
 		static auto extractTop(R&& range) {
-			const auto first = std::ranges::begin(std::forward<R>(range));
-			const auto last = std::ranges::end(std::forward<R>(range)) - 1;
+			const auto first = std::ranges::begin(range);
+			const auto last = std::ranges::end(range) - 1;
 			
 			auto value = std::exchange(*first, *last);
 			heapify(std::ranges::subrange(first, last), 0);
@@ -57,11 +57,11 @@ namespace dsa {
 		}
 
 
-		/** @brief Checks a range of values against the min-heap property constraints. */
+		/** @brief Checks a range of values against the max-heap property constraints. */
 		template <std::ranges::random_access_range R>
 		static bool isHeap(R&& range, std::size_t startNode = 0) {
-			return hasHeapProperty(std::forward<R>(range), startNode, leftChildOf(startNode))
-				&& hasHeapProperty(std::forward<R>(range), startNode, rightChildOf(startNode));
+			return hasMaxHeapProperty(range, startNode, leftChildOf(startNode))
+				&& hasMaxHeapProperty(range, startNode, rightChildOf(startNode));
 		}
 		/** @} */
 
@@ -88,26 +88,26 @@ namespace dsa {
 
 		template <typename R>
 		static void heapify(R&& range, std::size_t n) {
-			auto min = n;
-			while((min = smallerChildOrNode(std::forward<R>(range), n)) != n) {
-				std::swap(range[n], range[min]);
-				n = min;
+			auto max = n;
+			while((max = largerChildOrNode(range, n)) != n) {
+				std::swap(range[n], range[max]);
+				n = max;
 			}
 		}
 
 
 		template <typename R>
-		static std::size_t smallerChildOrNode(R&& range, std::size_t n) {
-			return minimum(std::forward<R>(range),
-				minimum(std::forward<R>(range), n, leftChildOf(n)),
+		static std::size_t largerChildOrNode(const R& range, std::size_t n) {
+			return maximum(range,
+				maximum(range, n, leftChildOf(n)),
 				rightChildOf(n)
 			);
 		}
 
 
 		template <typename R>
-		static std::size_t minimum(R&& range, std::size_t n, std::size_t child) {
-			if(child < std::ranges::size(range) && range[child] < range[n]) {
+		static std::size_t maximum(const R& range, std::size_t n, std::size_t child) {
+			if(child < std::ranges::size(range) && range[n] < range[child]) {
 				return child;
 			}
 			return n;
@@ -115,9 +115,9 @@ namespace dsa {
 
 
 		template <typename R>
-		static bool hasHeapProperty(R&& range, std::size_t n, std::size_t child) {
+		static bool hasMaxHeapProperty(const R& range, std::size_t n, std::size_t child) {
 			if(child < std::ranges::size(range)) {
-				if(range[child] < range[n] || !isHeap(std::forward<R>(range), child)) {
+				if(range[n] < range[child] || !isHeap(range, child)) {
 					return false;
 				}
 			}

@@ -23,28 +23,30 @@ private:
 };
 
 
-TEST_F(HeapTests, pushPutsSmallestValueAtTop) {
-	pushAndCheck(5, 5);
-	pushAndCheck(3, 3);
-	pushAndCheck(4, 3);
-	pushAndCheck(1, 1);
+TEST_F(HeapTests, pushPutsLargestValueOnTop) {
 	pushAndCheck(0, 0);
-	pushAndCheck(2, 0);
+	pushAndCheck(3, 3);
+	pushAndCheck(2, 3);
+	pushAndCheck(4, 4);
+	pushAndCheck(5, 5);
+	pushAndCheck(3, 5);
 }
 
 TEST_F(HeapTests, popExtractsElementsInDescendingOrder) {
 	push(4);
 	push(6);
-	popAndCheck(4);
+	popAndCheck(6);
 
 	push(3);
 	push(3);
 	push(2);
-	popAndCheck(2);
+	push(5);
+	popAndCheck(5);
+	popAndCheck(4);
 	popAndCheck(3);
 	popAndCheck(3);
 
-	push(0);
-	popAndCheck(0);
+	push(6);
 	popAndCheck(6);
+	popAndCheck(2);
 }
