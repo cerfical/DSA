@@ -2,13 +2,13 @@
 #define DSA_SEARCH_HEADER
 
 #include <ranges>
-#include <iterator>
-#include <utility>
 
 namespace dsa {
 
+	/** @name Search */
+	/** @{ */
 	/**
-	 * @brief Performs a search on a range of values in O(n) time.
+	 * @brief Performs an ordinary linear search on a range of values in @f$O(n)@f$ time.
 	 */
 	template <std::ranges::forward_range R, typename T>
 	auto linearSearch(R&& range, T&& searchValue) {
@@ -21,9 +21,8 @@ namespace dsa {
 	}
 
 
-
 	/**
-	 * @brief Performs a search on a sorted range of values in O(lg n) time.
+	 * @brief Performs an iterative binary search on a sorted range of values in @f$O(\lg n)@f$ time.
 	 */
 	template <std::ranges::forward_range R, typename T>
 	auto binarySearch(R&& range, T&& searchValue) {
@@ -47,6 +46,7 @@ namespace dsa {
 
 		return range.end();
 	}
+	/** @} */
 
 }
 
