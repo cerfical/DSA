@@ -19,6 +19,7 @@ target_sources(dsa INTERFACE FILE_SET HEADERS BASE_DIRS "include"
 		"include/DSA/ListIterator.hpp"
 		"include/DSA/List.hpp"
 	
+		"include/DSA/Queue.hpp"
 		"include/DSA/Stack.hpp"
 
 		"include/DSA/HeapUtils.hpp"

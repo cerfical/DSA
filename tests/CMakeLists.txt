@@ -10,7 +10,7 @@ add_executable(dsa-tests
 
 	"AdapterTests.hpp"
 	"HeapTests.cpp"
-
+	"QueueTests.cpp"
 	"StackTests.cpp"
 )
 
