@@ -12,6 +12,9 @@ target_sources(dsa INTERFACE FILE_SET HEADERS BASE_DIRS "include"
 		"include/DSA/Sort.hpp"
 		"include/DSA/Search.hpp"
 		
+		"include/DSA/ListNode.hpp"
+		"include/DSA/ListConstIterator.hpp"
+		"include/DSA/ListIterator.hpp"
 		"include/DSA/List.hpp"
 		"include/DSA/Heap.hpp"
 
