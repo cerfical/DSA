@@ -1,17 +1,18 @@
 #ifndef DSA_SORT_HEADER
 #define DSA_SORT_HEADER
 
-#include <concepts>
+#include "HeapUtils.hpp"
+
 #include <algorithm>
 #include <ranges>
 #include <vector>
 
-#include "HeapUtils.hpp"
-
 namespace dsa {
 
+	/** @name Sorting */
+	/** @{ */
 	/**
-	 * @brief Sorts a range of values in O(n^2) time.
+	 * @brief Sorts a range of values in @f$O(n^2)@f$ time.
 	 */
 	template <std::ranges::random_access_range R>
 	void bubbleSort(R&& range) {
@@ -35,7 +36,7 @@ namespace dsa {
 
 
 	/**
-	 * @brief Sorts a range of values in O(n^2) time.
+	 * @brief Sorts a range of values in @f$O(n^2)@f$ time.
 	 */
 	template <std::ranges::random_access_range R>
 	void selectionSort(R&& range) {
@@ -49,7 +50,7 @@ namespace dsa {
 
 
 	/**
-	 * @brief Sorts a range of values in O(n^2) time.
+	 * @brief Sorts a range of values in @f$O(n^2)@f$ time.
 	 */
 	template <std::ranges::random_access_range R>
 	void insertionSort(R&& range) {
@@ -70,7 +71,7 @@ namespace dsa {
 
 
 	/**
-	 * @brief Sorts a range of values in O(n * lg n) time.
+	 * @brief Performs a recursive sort in @f$O(n * \lg n)@f$ time, using extra memory.
 	 */
 	template <std::ranges::random_access_range R>
 	void mergeSort(R&& range) {
@@ -112,7 +113,7 @@ namespace dsa {
 
 
 	/**
-	 * @brief Sorts a range of values in O(n * lg n) time on average.
+	 * @brief Performs a recursive in-place sort in @f$O(n * \lg n)@f$ time on average.
 	 */
 	template <std::ranges::random_access_range R>
 	void quickSort(R&& range) {
@@ -150,7 +151,7 @@ namespace dsa {
 
 
 	/**
-	 * @brief Sorts a range of values in O(n * lg n).
+	 * @brief Performs an in-place sort in @f$O(n * \lg n)@f$.
 	 */
 	template <std::ranges::random_access_range R>
 	void heapSort(R&& range) {
@@ -166,6 +167,7 @@ namespace dsa {
 			*heapEnd = std::move(value);
 		}
 	}
+	/** @} */
 
 }
 
