@@ -5,22 +5,29 @@
 #include <vector>
 
 namespace dsa {
+
 	/**
 	 * @brief Implements a fast queue that gives priority to 'larger' elements first.
 	 */
 	template <typename T>
 	class Heap {
 	public:
-		Heap() = default;
-
-
-		Heap(const Heap&) = default;
+		
 		Heap& operator=(const Heap&) = default;
-
-		Heap(Heap&&) = default;
 		Heap& operator=(Heap&&) = default;
 
 
+		/** @name Heap initialization */
+		/** @{ */
+		Heap() = default;
+		
+		Heap(const Heap&) = default;
+		Heap(Heap&&) = default;
+		/** @} */
+
+
+		/** @name Element insertion/retrieval */
+		/** @{ */
 		const T& top() const noexcept {
 			return m_data.front();
 		}
@@ -40,8 +47,11 @@ namespace dsa {
 			m_data.pop_back();
 			return value;
 		}
+		/** @} */
 
 
+		/** @name Heap size */
+		/** @{ */
 		std::size_t size() const noexcept {
 			return m_data.size();
 		}
@@ -49,11 +59,13 @@ namespace dsa {
 		bool isEmpty() const noexcept {
 			return size() == 0;
 		}
+		/** @} */
 
 
 	private:
 		std::vector<T> m_data;
 	};
+
 }
 
 #endif

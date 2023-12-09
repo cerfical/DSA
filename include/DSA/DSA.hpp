@@ -5,6 +5,9 @@
 #include "Sort.hpp"
 
 #include "List.hpp"
+
+#include "Queue.hpp"
+#include "Stack.hpp"
 #include "Heap.hpp"
 
 

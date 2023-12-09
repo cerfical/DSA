@@ -37,11 +37,12 @@ public:
 
 
 	DtorCallTracer(const DtorCallTracer&) = delete;
+
 	DtorCallTracer& operator=(const DtorCallTracer&) = delete;
 
 
 private:
-	int* m_dtorCalls;
+	int* m_dtorCalls = {};
 };
 
 
@@ -59,7 +60,7 @@ TEST_F(ListTests, clearMakesListEmpty) {
 	ASSERT_TRUE(list.isEmpty());
 }
 
-TEST_F(ListTests, clearDestroysAllElements) {
+TEST_F(ListTests, clearDestroysAllListElements) {
 	dsa::List<DtorCallTracer> tracers;
 	int dtorCalls = 0;
 
@@ -78,7 +79,7 @@ TEST_F(ListTests, pushBackIncreasesListSize) {
 	ASSERT_EQ(list.size(), 4);
 }
 
-TEST_F(ListTests, pushBackInsertsElementAtListBack) {
+TEST_F(ListTests, pushBackPutsElementInListBack) {
 	list.pushBack(12);
 	ASSERT_EQ(list.back(), 12);
 }
@@ -90,7 +91,7 @@ TEST_F(ListTests, popBackDecreasesListSize) {
 	ASSERT_EQ(list.size(), 2);
 }
 
-TEST_F(ListTests, popBackReturnsElementAtListBack) {
+TEST_F(ListTests, popBackReturnsElementInListBack) {
 	ASSERT_EQ(list.popBack(), 3);
 }
 
@@ -101,7 +102,7 @@ TEST_F(ListTests, pushFrontIncreasesListSize) {
 	ASSERT_EQ(list.size(), 4);
 }
 
-TEST_F(ListTests, pushFrontInsertsElementAtListFront) {
+TEST_F(ListTests, pushFrontPutsElementInListFront) {
 	list.pushFront(12);
 	ASSERT_EQ(list.front(), 12);
 }
@@ -113,7 +114,7 @@ TEST_F(ListTests, popFrontDecreasesListSize) {
 	ASSERT_EQ(list.size(), 2);
 }
 
-TEST_F(ListTests, popFrontReturnsElementAtListFront) {
+TEST_F(ListTests, popFrontReturnsElementInListFront) {
 	ASSERT_EQ(list.popFront(), 1);
 }
 
