@@ -5,10 +5,13 @@ add_executable(dsa-tests
 	"SearchTests.cpp"
 	"SortTests.cpp"
 
+	"HeapUtilsTests.cpp"
 	"ListTests.cpp"
+
+	"AdapterTests.hpp"
 	"HeapTests.cpp"
 
-	"HeapUtilsTests.cpp"
+	"StackTests.cpp"
 )
 
 target_link_libraries(dsa-tests
