@@ -7,10 +7,8 @@
 #include "List.hpp"
 #include "Heap.hpp"
 
-#include "HeapUtils.hpp"
 
-
-/** @brief The root namespace containing all available algorithm and data structure implementations. */
+/** @brief The root namespace containing all implemented algorithms and data structures. */
 namespace dsa { }
 
 

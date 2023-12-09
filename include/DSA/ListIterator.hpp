@@ -19,7 +19,6 @@ namespace dsa {
 		{ }
 
 
-
 		ListIterator& operator++() noexcept {
 			ListConstIterator<T>::operator++();
 			return *this;
@@ -44,21 +43,12 @@ namespace dsa {
 		}
 
 
-		const T& operator*() const noexcept {
-			return ListConstIterator<T>::operator*();
+		T& operator*() const noexcept {
+			return const_cast<T&>(ListConstIterator<T>::operator*());
 		}
 
-		T& operator*() noexcept {
-			return const_cast<T&>(static_cast<const ListIterator*>(this)->operator*());
-		}
-
-
-		const T* operator->() const noexcept {
-			return ListConstIterator<T>::operator->();
-		}
-
-		T* operator->() noexcept {
-			return const_cast<T&>(static_cast<const ListIterator*>(this)->operator->());
+		T* operator->() const noexcept {
+			return &operator*();
 		}
 
 	};

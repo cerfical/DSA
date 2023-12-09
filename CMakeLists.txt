@@ -9,6 +9,8 @@ add_library(dsa INTERFACE)
 
 target_sources(dsa INTERFACE FILE_SET HEADERS BASE_DIRS "include"
 	FILES
+		"include/DSA/DSA.hpp"
+		
 		"include/DSA/Sort.hpp"
 		"include/DSA/Search.hpp"
 		
@@ -16,9 +18,9 @@ target_sources(dsa INTERFACE FILE_SET HEADERS BASE_DIRS "include"
 		"include/DSA/ListConstIterator.hpp"
 		"include/DSA/ListIterator.hpp"
 		"include/DSA/List.hpp"
-		"include/DSA/Heap.hpp"
-
+	
 		"include/DSA/HeapUtils.hpp"
+		"include/DSA/Heap.hpp"
 )
 
 target_include_directories(dsa INTERFACE "include")
