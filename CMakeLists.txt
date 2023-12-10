@@ -1,8 +1,11 @@
 ﻿cmake_minimum_required(VERSION 3.23)
 
 
-project(DSA LANGUAGES CXX DESCRIPTION "Example implementations of the classic data structures and algorithms")
+project(DSA LANGUAGES CXX DESCRIPTION "Example implementations of classic data structures and algorithms")
 include(CTest)
+
+
+option(BUILD_DOC "Generate documentation from source tree with Doxygen" OFF)
 
 
 add_library(dsa INTERFACE)
@@ -28,6 +31,11 @@ target_sources(dsa INTERFACE FILE_SET HEADERS BASE_DIRS "include"
 
 target_include_directories(dsa INTERFACE "include")
 target_compile_features(dsa INTERFACE cxx_std_20)
+
+
+if(BUILD_DOC)
+	add_subdirectory(docs)
+endif()
 
 
 if(BUILD_TESTING)
