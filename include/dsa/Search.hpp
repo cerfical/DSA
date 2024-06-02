@@ -1,5 +1,4 @@
-#ifndef DSA_SEARCH_HEADER
-#define DSA_SEARCH_HEADER
+#pragma once
 
 #include <ranges>
 
@@ -49,5 +48,3 @@ namespace dsa {
 	/** @} */
 
 }
-
-#endif

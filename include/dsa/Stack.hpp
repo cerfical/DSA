@@ -1,5 +1,4 @@
-#ifndef DSA_STACK_HEADER
-#define DSA_STACK_HEADER
+#pragma once
 
 #include <deque>
 
@@ -69,5 +68,3 @@ namespace dsa {
 	};
 
 }
-
-#endif

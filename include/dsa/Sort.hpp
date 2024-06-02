@@ -1,5 +1,4 @@
-#ifndef DSA_SORT_HEADER
-#define DSA_SORT_HEADER
+#pragma once
 
 #include "HeapUtils.hpp"
 
@@ -170,5 +169,3 @@ namespace dsa {
 	/** @} */
 
 }
-
-#endif

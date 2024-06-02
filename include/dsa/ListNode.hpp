@@ -1,5 +1,4 @@
-#ifndef DSA_LIST_NODE_HEADER
-#define DSA_LIST_NODE_HEADER
+#pragma once
 
 namespace dsa {
 
@@ -17,5 +16,3 @@ namespace dsa {
 	};
 
 }
-
-#endif

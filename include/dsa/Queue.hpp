@@ -1,5 +1,4 @@
-#ifndef DSA_QUEUE_HEADER
-#define DSA_QUEUE_HEADER
+#pragma once
 
 #include <deque>
 
@@ -78,5 +77,3 @@ namespace dsa {
 	};
 
 }
-
-#endif

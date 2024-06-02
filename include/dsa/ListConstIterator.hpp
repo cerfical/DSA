@@ -1,5 +1,4 @@
-#ifndef DSA_LIST_CONST_ITERATOR_HEADER
-#define DSA_LIST_CONST_ITERATOR_HEADER
+#pragma once
 
 #include "ListNode.hpp"
 #include <cassert>
@@ -82,5 +81,3 @@ namespace dsa {
 	};
 
 }
-
-#endif

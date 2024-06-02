@@ -1,5 +1,4 @@
-#ifndef DSA_LIST_HEADER
-#define DSA_LIST_HEADER
+#pragma once
 
 #include "ListIterator.hpp"
 
@@ -253,5 +252,3 @@ namespace dsa {
 	};
 
 }
-
-#endif

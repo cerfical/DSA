@@ -1,5 +1,4 @@
-#ifndef DSA_LIST_ITERATOR_HEADER
-#define DSA_LIST_ITERATOR_HEADER
+#pragma once
 
 #include "ListConstIterator.hpp"
 
@@ -54,5 +53,3 @@ namespace dsa {
 	};
 
 }
-
-#endif

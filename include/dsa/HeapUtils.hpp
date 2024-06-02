@@ -1,5 +1,4 @@
-#ifndef DSA_HEAP_UTILS_HEADER
-#define DSA_HEAP_UTILS_HEADER
+#pragma once
 
 #include <ranges>
 
@@ -130,5 +129,3 @@ namespace dsa {
 
 	};
 }
-
-#endif

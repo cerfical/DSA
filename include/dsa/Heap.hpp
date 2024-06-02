@@ -1,5 +1,4 @@
-#ifndef DSA_HEAP_HEADER
-#define DSA_HEAP_HEADER
+#pragma once
 
 #include "HeapUtils.hpp"
 #include <vector>
@@ -67,5 +66,3 @@ namespace dsa {
 	};
 
 }
-
-#endif

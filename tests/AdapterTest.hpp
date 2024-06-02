@@ -1,5 +1,4 @@
-#ifndef DSA_TESTS_ADAPTER_TESTS_HEADER
-#define DSA_TESTS_ADAPTER_TESTS_HEADER
+#pragma once
 
 #include <gtest/gtest.h>
 
@@ -40,6 +39,3 @@ protected:
 private:
 	C<T> m_data;
 };
-
-
-#endif
