@@ -1,39 +1,39 @@
 ﻿cmake_minimum_required(VERSION 3.23)
 
 
-project(DSA LANGUAGES CXX DESCRIPTION "Example implementations of classic data structures and algorithms")
+project(DSA LANGUAGES CXX DESCRIPTION "Classic data structures and algorithms")
 include(CTest)
 
 
-option(BUILD_DOC "Generate documentation from source tree with Doxygen" OFF)
+option(BUILD_DOCS "Generate documentation from the source tree using Doxygen" ON)
 
 
 add_library(dsa INTERFACE)
 
 target_sources(dsa INTERFACE FILE_SET HEADERS BASE_DIRS "include"
 	FILES
-		"include/DSA/DSA.hpp"
+		"include/dsa/dsa.hpp"
 		
-		"include/DSA/Sort.hpp"
-		"include/DSA/Search.hpp"
+		"include/dsa/Sort.hpp"
+		"include/dsa/Search.hpp"
 		
-		"include/DSA/ListNode.hpp"
-		"include/DSA/ListConstIterator.hpp"
-		"include/DSA/ListIterator.hpp"
-		"include/DSA/List.hpp"
+		"include/dsa/ListNode.hpp"
+		"include/dsa/ListConstIterator.hpp"
+		"include/dsa/ListIterator.hpp"
+		"include/dsa/List.hpp"
 	
-		"include/DSA/Queue.hpp"
-		"include/DSA/Stack.hpp"
+		"include/dsa/Queue.hpp"
+		"include/dsa/Stack.hpp"
 
-		"include/DSA/HeapUtils.hpp"
-		"include/DSA/Heap.hpp"
+		"include/dsa/HeapUtils.hpp"
+		"include/dsa/Heap.hpp"
 )
 
 target_include_directories(dsa INTERFACE "include")
 target_compile_features(dsa INTERFACE cxx_std_20)
 
 
-if(BUILD_DOC)
+if(BUILD_DOCS)
 	add_subdirectory(docs)
 endif()
 

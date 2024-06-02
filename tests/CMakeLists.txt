@@ -2,16 +2,16 @@ find_package(GTest REQUIRED)
 include(GoogleTest)
 
 add_executable(dsa-tests
-	"SearchTests.cpp"
-	"SortTests.cpp"
+	"SearchTest.cpp"
+	"SortTest.cpp"
 
-	"HeapUtilsTests.cpp"
-	"ListTests.cpp"
+	"HeapUtilsTest.cpp"
+	"ListTest.cpp"
 
-	"AdapterTests.hpp"
-	"HeapTests.cpp"
-	"QueueTests.cpp"
-	"StackTests.cpp"
+	"AdapterTest.hpp"
+	"HeapTest.cpp"
+	"QueueTest.cpp"
+	"StackTest.cpp"
 )
 
 target_link_libraries(dsa-tests
