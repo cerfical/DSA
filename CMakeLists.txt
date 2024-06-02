@@ -37,7 +37,12 @@ if(BUILD_DOCS)
 	add_subdirectory(docs)
 endif()
 
-
 if(BUILD_TESTING)
 	add_subdirectory(tests)
 endif()
+
+
+# Generate .gitignore file to take care of the build directory automatically
+file(WRITE "${CMAKE_BINARY_DIR}/.gitignore" [[
+*
+]])
