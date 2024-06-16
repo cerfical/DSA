@@ -16,7 +16,6 @@ add_executable(dsa-tests
     "search_test.cpp"
     "sort_test.cpp"
 
-    "HeapUtilTest.cpp"
     "list_test.cpp"
 
     "heap_test.cpp"
