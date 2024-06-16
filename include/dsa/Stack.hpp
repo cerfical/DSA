@@ -1,70 +1,58 @@
 #pragma once
 
+#include <cstddef>
 #include <deque>
 
 namespace dsa {
 
-	/**
-	 * @brief Implements a simple LIFO stack.
-	 */
-	template <typename T>
-	class Stack {
-	public:
+    /**
+     * @brief Implements a simple LIFO stack.
+     */
+    template <typename T>
+    class Stack {
+    public:
 
-		Stack& operator=(const Stack&) = default;
-		Stack& operator=(Stack&&) = default;
+        /** @name Element insertion/retrieval */
+        /** @{ */
+        const T& top() const noexcept {
+            return data_.back();
+        }
 
-
-		/** @name Stack creation */
-		/** @{ */
-		Stack() = default;
-
-		Stack(const Stack&) = default;
-		Stack(Stack&&) = default;
-		/** @} */
+        T& top() noexcept {
+            return data_.back();
+        }
 
 
-		/** @name Element insertion/retrieval */
-		/** @{ */
-		const T& top() const noexcept {
-			return m_data.back();
-		}
+        void push(const T& value) {
+            data_.push_back(value);
+        }
 
-		T& top() noexcept {
-			return m_data.back();
-		}
+        void push(T&& value) {
+            data_.push_back(std::move(value));
+        }
 
-
-		void push(const T& value) {
-			m_data.push_back(value);
-		}
-
-		void push(T&& value) {
-			m_data.push_back(std::move(value));
-		}
-
-		T pop() {
-			auto value = std::move(m_data.back());
-			m_data.pop_back();
-			return value;
-		}
-		/** @} */
+        T pop() {
+            auto value = std::move(data_.back());
+            data_.pop_back();
+            return value;
+        }
+        /** @} */
 
 
-		/** @name Stack size */
-		/** @{ */
-		std::size_t size() const noexcept {
-			return m_data.size();
-		}
+        /** @name Stack size */
+        /** @{ */
+        std::size_t size() const noexcept {
+            return data_.size();
+        }
 
-		bool isEmpty() const noexcept {
-			return size() == 0;
-		}
-		/** @} */
+        bool isEmpty() const noexcept {
+            return size() == 0;
+        }
+        /** @} */
 
 
-	private:
-		std::deque<T> m_data;
-	};
+    private:
+        std::deque<T> data_;
+    };
 
 }

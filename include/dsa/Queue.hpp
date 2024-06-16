@@ -1,79 +1,67 @@
 #pragma once
 
+#include <cstddef>
 #include <deque>
 
 namespace dsa {
 
-	/**
-	 * @brief Implements a simple FIFO queue.
-	 */
-	template <typename T>
-	class Queue {
-	public:
+    /**
+     * @brief Implements a simple FIFO queue.
+     */
+    template <typename T>
+    class Queue {
+    public:
 
-		Queue& operator=(const Queue&) = default;
-		Queue& operator=(Queue&&) = default;
-		
+        /** @name Element insertion/retrieval */
+        /** @{ */
+        const T& front() const noexcept {
+            return data_.front();
+        }
 
-		/** @name Queue creation */
-		/** @{ */
-		Queue() = default;
-
-		Queue(const Queue&) = default;
-		Queue(Queue&&) = default;
-		/** @} */
+        const T& back() const noexcept {
+            return data_.back();
+        }
 
 
-		/** @name Element insertion/retrieval */
-		/** @{ */
-		const T& front() const noexcept {
-			return m_data.front();
-		}
+        T& front() noexcept {
+            return data_.front();
+        }
 
-		const T& back() const noexcept {
-			return m_data.back();
-		}
+        T& back() noexcept {
+            return data_.back();
+        }
 
 
-		T& front() noexcept {
-			return m_data.front();
-		}
+        void push(const T& value) {
+            data_.push_back(value);
+        }
 
-		T& back() noexcept {
-			return m_data.back();
-		}
+        void push(T&& value) {
+            data_.push_back(std::move(value));
+        }
 
-
-		void push(const T& value) {
-			m_data.push_back(value);
-		}
-
-		void push(T&& value) {
-			m_data.push_back(std::move(value));
-		}
-
-		T pop() {
-			auto value = std::move(m_data.front());
-			m_data.pop_front();
-			return value;
-		}
-		/** @} */
+        T pop() {
+            auto value = std::move(data_.front());
+            data_.pop_front();
+            return value;
+        }
+        /** @} */
 
 
-		/** @name Queue size */
-		/** @{ */
-		std::size_t size() const noexcept {
-			return m_data.size();
-		}
+        /** @name Queue size */
+        /** @{ */
+        std::size_t size() const noexcept {
+            return data_.size();
+        }
 
-		bool isEmpty() const noexcept {
-			return size() == 0;
-		}
-		/** @} */
+        bool isEmpty() const noexcept {
+            return size() == 0;
+        }
+        /** @} */
 
 
-	private:
-		std::deque<T> m_data;
-	};
+    private:
+        std::deque<T> data_;
+    };
 
 }

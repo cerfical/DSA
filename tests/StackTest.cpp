@@ -1,6 +1,6 @@
 #include "AdapterTest.hpp"
 
-#include <DSA/Stack.hpp>
+#include <dsa/Stack.hpp>
 #include <gtest/gtest.h>
 
 

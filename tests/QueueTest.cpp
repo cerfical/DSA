@@ -1,6 +1,6 @@
 #include "AdapterTest.hpp"
 
-#include <DSA/Queue.hpp>
+#include <dsa/Queue.hpp>
 #include <gtest/gtest.h>
 
 

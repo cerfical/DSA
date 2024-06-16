@@ -1,4 +1,4 @@
-#include <DSA/List.hpp>
+#include <dsa/List.hpp>
 #include <gtest/gtest.h>
 
 #include <ostream>

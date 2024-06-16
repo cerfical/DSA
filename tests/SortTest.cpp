@@ -1,4 +1,4 @@
-#include <DSA/Sort.hpp>
+#include <dsa/Sort.hpp>
 #include <gtest/gtest.h>
 
 #include <algorithm>

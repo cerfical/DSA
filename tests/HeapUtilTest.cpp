@@ -1,4 +1,4 @@
-#include <DSA/HeapUtil.hpp>
+#include <dsa/HeapUtil.hpp>
 #include <gtest/gtest.h>
 
 #include <algorithm>

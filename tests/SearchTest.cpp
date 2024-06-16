@@ -1,4 +1,4 @@
-#include <DSA/Search.hpp>
+#include <dsa/Search.hpp>
 #include <gtest/gtest.h>
 
 #include <algorithm>
