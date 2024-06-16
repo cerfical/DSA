@@ -1,7 +1,8 @@
 #pragma once
 
-#include "HeapUtil.hpp"
+#include "heap_util.hpp"
 
+#include <cstddef>
 #include <vector>
 
 namespace dsa {
@@ -13,19 +14,6 @@ namespace dsa {
     class Heap {
     public:
 
-        Heap& operator=(const Heap&) = default;
-        Heap& operator=(Heap&&) = default;
-
-
-        /** @name Heap initialization */
-        /** @{ */
-        Heap() = default;
-
-        Heap(const Heap&) = default;
-        Heap(Heap&&) = default;
-        /** @} */
-
-
         /** @name Element insertion/retrieval */
         /** @{ */
         const T& top() const noexcept {
@@ -34,16 +22,16 @@ namespace dsa {
 
         void push(const T& value) {
             data_.push_back(value);
-            HeapUtil::insertLast(data_);
+            heap::insertLast(data_);
         }
 
         void push(T&& value) {
             data_.push_back(std::move(value));
-            HeapUtil::insertLast(data_);
+            heap::insertLast(data_);
         }
 
         T pop() {
-            auto value = HeapUtil::extractTop(data_);
+            auto value = heap::extractTop(data_);
             data_.pop_back();
             return value;
         }

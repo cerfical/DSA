@@ -1,6 +1,6 @@
 #pragma once
 
-#include "HeapUtil.hpp"
+#include "heap_util.hpp"
 
 #include <algorithm>
 #include <ranges>
@@ -147,13 +147,13 @@ namespace dsa {
      */
     template <std::ranges::random_access_range R>
     void heapSort(R&& range) {
-        HeapUtil::createHeap(range);
+        heap::createHeap(range);
 
         const auto heapStart = std::ranges::begin(range);
         auto heapEnd = std::ranges::end(range);
 
         while(heapEnd != heapStart) {
-            auto value = HeapUtil::extractTop(std::ranges::subrange(heapStart, heapEnd));
+            auto value = heap::extractTop(std::ranges::subrange(heapStart, heapEnd));
             heapEnd--;
 
             *heapEnd = std::move(value);

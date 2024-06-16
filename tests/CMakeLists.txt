@@ -1,4 +1,4 @@
-set(TEST_TOOL GTest)
+set(TEST_TOOL Catch2)
 
 find_package(${TEST_TOOL})
 
@@ -9,32 +9,25 @@ if(NOT ${TEST_TOOL}_FOUND)
 endif()
 
 
-include(GoogleTest)
+include(Catch)
 
 
 add_executable(dsa-tests
-    "SearchTest.cpp"
-    "SortTest.cpp"
+    "search_test.cpp"
+    "sort_test.cpp"
 
     "HeapUtilTest.cpp"
-    "ListTest.cpp"
+    "list_test.cpp"
 
-    "HeapTest.cpp"
-    "QueueTest.cpp"
-    "StackTest.cpp"
-)
-
-target_sources(dsa-tests INTERFACE FILE_SET HEADERS
-    FILES "AdapterTest.hpp"    
+    "heap_test.cpp"
+    "queue_test.cpp"
+    "stack_test.cpp"
 )
 
 target_link_libraries(dsa-tests
-    PRIVATE GTest::gtest_main
-    PRIVATE GTest::gtest
-    PRIVATE GTest::gmock
-
+    PRIVATE Catch2::Catch2WithMain
     PRIVATE dsa
 )
 
 
-gtest_discover_tests(dsa-tests)
+catch_discover_tests(dsa-tests)
