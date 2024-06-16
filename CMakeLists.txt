@@ -13,8 +13,8 @@ add_library(dsa INTERFACE)
 
 target_sources(dsa INTERFACE FILE_SET HEADERS BASE_DIRS "include"
     FILES
-        "include/dsa/Sort.hpp"
-        "include/dsa/Search.hpp"
+        "include/dsa/sort.hpp"
+        "include/dsa/search.hpp"
         
         "include/dsa/ListNode.hpp"
         "include/dsa/ListConstIterator.hpp"
