@@ -1,254 +1,251 @@
 #pragma once
 
+#include "ListConstIterator.hpp"
 #include "ListIterator.hpp"
+#include "ListNode.hpp"
 
-#include <ostream>
-#include <initializer_list>
 #include <cassert>
+#include <cstddef>
+#include <initializer_list>
 #include <memory>
+#include <ostream>
 
 namespace dsa {
 
-	/**
-	 * @brief Implements a doubly linked list.
-	 */
-	template <typename T>
-	class List {
-	public:
+    /**
+     * @brief Implements a doubly linked list.
+     */
+    template <typename T>
+    class List {
+    public:
 
-		friend std::ostream& operator<<(std::ostream& out, const List& list) {
-			out << "{ ";
-			for(const auto& val : list) {
-				out << val << ' ';
-			}
-			out << '}';
-			return out;
-		}
+        friend std::ostream& operator<<(std::ostream& out, const List& list) {
+            out << "{ ";
+            for(const auto& val : list) {
+                out << val << ' ';
+            }
+            out << '}';
+            return out;
+        }
 
-		friend bool operator==(const List& lhs, const List& rhs) noexcept {
-			if(lhs.size() != rhs.size()) {
-				return false;
-			}
 
-			for(auto rhsIt = rhs.begin(); const auto& val : lhs) {
-				if(val != *rhsIt) {
-					return false;
-				}
-				rhsIt++;
-			}
+        friend bool operator==(const List& lhs, const List& rhs) noexcept {
+            if(lhs.size() != rhs.size()) {
+                return false;
+            }
 
-			return true;
-		}
+            for(auto rhsIt = rhs.begin(); const auto& val : lhs) {
+                if(val != *rhsIt) {
+                    return false;
+                }
+                rhsIt++;
+            }
 
+            return true;
+        }
 
 
-		List& operator=(const List& other) {
-			assert(this != &other && "Self copy-assignment");
+        List(const List& other) {
+            for(const auto& val : other) {
+                pushBack(val);
+            }
+        }
 
-			std::destroy_at(this);
-			std::construct_at(this, other);
 
-			return *this;
-		}
+        List& operator=(const List& other) {
+            assert(this != &other && "Self copy-assignment");
 
-		List& operator=(List&& other) noexcept {
-			assert(this != &other && "Self move-assignment");
+            std::destroy_at(this);
+            std::construct_at(this, other);
 
-			std::destroy_at(this);
-			std::construct_at(this, std::move(other));
+            return *this;
+        }
 
-			return *this;
-		}
 
+        List(List&& other) noexcept {
+            other.head_.prev->next = &head_;
+            other.head_.next->prev = &head_;
 
-		~List() {
-			clear();
-		}
+            head_.next = other.head_.next;
+            head_.prev = other.head_.prev;
+            head_.value = other.head_.value;
 
+            std::construct_at(&other);
+        }
 
 
-		/** @name List creation */
-		/** @{ */
-		List() noexcept {
-			m_head.prev = m_head.next = &m_head;
-		}
-		
-		List(std::initializer_list<T> values) : List() {
-			for(const auto& v : values) {
-				pushBack(v);
-			}
-		}
+        List& operator=(List&& other) noexcept {
+            assert(this != &other && "Self move-assignment");
 
+            std::destroy_at(this);
+            std::construct_at(this, std::move(other));
 
-		List(const List& other) : List() {
-			for(const auto& val : other) {
-				pushBack(val);
-			}
-		}
+            return *this;
+        }
 
-		List(List&& other) noexcept : List() {
-			other.m_head.prev->next = &m_head;
-			other.m_head.next->prev = &m_head;
-			
-			m_head.next = other.m_head.next;
-			m_head.prev = other.m_head.prev;
-			m_size = other.m_size;
 
-			std::construct_at(&other);
-		}
-		/** @} */
+        List(std::initializer_list<T> values) {
+            for(const auto& v : values) {
+                pushBack(v);
+            }
+        }
 
 
+        List() noexcept = default;
 
-		/** @name Element insertion */
-		/** @{ */
-		void pushFront(const T& value) {
-			makeNode(value, &m_head);
-		}
+        ~List() {
+            clear();
+        }
 
-		void pushFront(T&& value) {
-			makeNode(std::move(value), &m_head);
-		}
 
+        /** @name Element insertion */
+        /** @{ */
+        void pushFront(const T& value) {
+            insertNode(value, head());
+        }
 
-		void pushBack(const T& value) {
-			makeNode(value, m_head.prev);
-		}
+        void pushFront(T&& value) {
+            insertNode(std::move(value), head());
+        }
 
-		void pushBack(T&& value) {
-			makeNode(std::move(value), m_head.prev);
-		}
-		/** @} */
 
+        void pushBack(const T& value) {
+            insertNode(value, head()->prev);
+        }
 
+        void pushBack(T&& value) {
+            insertNode(std::move(value), head()->prev);
+        }
+        /** @} */
 
-		/** @name Element retrieval */
-		/** @{ */
-		T popFront() {
-			auto val = std::move(nodeAtHead()->value);
-			deleteNode(nodeAtHead());
-			return val;
-		}
-		
-		const T& front() const noexcept {
-			return nodeAtHead()->value;
-		}
 
-		T& front() noexcept {
-			return nodeAtHead()->value;
-		}
+        /** @name Element retrieval */
+        /** @{ */
+        T popFront() {
+            auto val = std::move(nodeAtHead()->value);
+            deleteNode(nodeAtHead());
+            return val;
+        }
 
+        const T& front() const noexcept {
+            return nodeAtHead()->value;
+        }
 
-		T popBack() {
-			auto val = std::move(nodeAtTail()->value);
-			deleteNode(nodeAtTail());
-			return val;
-		}
+        T& front() noexcept {
+            return nodeAtHead()->value;
+        }
 
-		const T& back() const noexcept {
-			return nodeAtTail()->value;
-		}
 
-		T& back() noexcept {
-			return nodeAtTail()->value;
-		}
-		/** @} */
+        T popBack() {
+            auto val = std::move(nodeAtTail()->value);
+            deleteNode(nodeAtTail());
+            return val;
+        }
 
+        const T& back() const noexcept {
+            return nodeAtTail()->value;
+        }
 
+        T& back() noexcept {
+            return nodeAtTail()->value;
+        }
+        /** @} */
 
-		/** @name List state */
-		/** @{ */
-		std::size_t size() const noexcept {
-			return m_size;
-		}
 
-		bool isEmpty() const noexcept {
-			return size() == 0;
-		}
+        /** @name List state */
+        /** @{ */
+        std::size_t size() const noexcept {
+            return head_.value;
+        }
 
-		void clear() {
-			while(!isEmpty()) {
-				deleteNode(nodeAtTail());
-			}
-		}
-		/** @} */
+        bool isEmpty() const noexcept {
+            return size() == 0;
+        }
 
+        void clear() {
+            while(!isEmpty()) {
+                deleteNode(nodeAtTail());
+            }
+        }
+        /** @} */
 
 
-		/** @name Iteration support */
-		/** @{ */
-		ListConstIterator<T> cbegin() const noexcept {
-			return begin();
-		}
+        /** @name Iteration support */
+        /** @{ */
+        ListConstIterator<T> cbegin() const noexcept {
+            return begin();
+        }
 
-		ListConstIterator<T> begin() const noexcept {
-			return const_cast<List*>(this)->begin();
-		}
+        ListConstIterator<T> begin() const noexcept {
+            return const_cast<List*>(this)->begin();
+        }
 
-		ListIterator<T> begin() noexcept {
-			return ListIterator(this, m_head.next);
-		}
+        ListIterator<T> begin() noexcept {
+            return ListIterator(this, head()->next);
+        }
 
 
-		ListConstIterator<T> cend() const noexcept {
-			return end();
-		}
+        ListConstIterator<T> cend() const noexcept {
+            return end();
+        }
 
-		ListConstIterator<T> end() const noexcept {
-			return const_cast<List*>(this)->end();
-		}
+        ListConstIterator<T> end() const noexcept {
+            return const_cast<List*>(this)->end();
+        }
 
-		ListIterator<T> end() noexcept {
-			return ListIterator(this, &m_head);
-		}
-		/** @} */
+        ListIterator<T> end() noexcept {
+            return ListIterator(this, head());
+        }
+        /** @} */
 
 
+    private:
 
-	private:
+        template <typename S>
+        void insertNode(S&& value, ListNode<T>* prev) {
+            auto* const n = new ListNode<T>(prev, prev->next, std::forward<S>(value));
 
-		template <typename S>
-		void makeNode(S&& value, ListNode<T>* prev) {
-			auto n = std::make_unique<ListNode<T>>(
-				std::forward<S>(value), prev, prev->next
-			);
-			insertNode(n.release(), prev);
-		}
+            prev->next->prev = n;
+            prev->next = n;
 
-		void insertNode(ListNode<T>* n, ListNode<T>* prev) {
-			prev->next->prev = n;
-			prev->next = n;
-			m_size++;
-		}
+            head_.value++;
+        }
 
-		void deleteNode(ListNode<T>* n) {
-			n->prev->next = n->next;
-			n->next->prev = n->prev;
-			m_size--;
+        void deleteNode(ListNode<T>* n) {
+            n->prev->next = n->next;
+            n->next->prev = n->prev;
+            head_.value--;
 
-			delete n;
-		}
+            delete n;
+        }
 
 
-		ListNode<T>* nodeAtTail() const noexcept {
-			assert(!isEmpty() && "Attempting to read an element from the end of an empty list");
-			return m_head.prev;
-		}
+        ListNode<T>* nodeAtTail() const noexcept {
+            assert(!isEmpty() && "Attempting to read an element from the end of an empty list");
+            return head()->prev;
+        }
 
-		ListNode<T>* nodeAtHead() const noexcept {
-			assert(!isEmpty() && "Attempting to read an element from the beginning of an empty list");
-			return m_head.next;
-		}
+        ListNode<T>* nodeAtHead() const noexcept {
+            assert(!isEmpty() && "Attempting to read an element from the beginning of an empty list");
+            return head()->next;
+        }
 
 
+        ListNode<T>* head() noexcept {
+            return reinterpret_cast<ListNode<T>*>(&head_);
+        }
 
-		std::size_t m_size = 0;
+        const ListNode<T>* head() const noexcept {
+            return const_cast<List*>(this)->head();
+        }
 
-		union {
-			std::byte m_unused[sizeof(ListNode<T>)] = {};
-			ListNode<T> m_head;
-		};
 
-	};
+        ListNode<std::size_t> makeListHead() noexcept {
+            return { &head_, &head_, 0 };
+        }
+
+
+        ListNode<std::size_t> head_ = makeListHead();
+    };
 
 }
