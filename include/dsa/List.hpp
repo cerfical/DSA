@@ -1,14 +1,8 @@
 #pragma once
 
-#include "ListConstIterator.hpp"
-#include "ListIterator.hpp"
-#include "ListNode.hpp"
-
-#include <cassert>
 #include <cstddef>
 #include <initializer_list>
 #include <memory>
-#include <ostream>
 
 namespace dsa {
 
@@ -17,32 +11,111 @@ namespace dsa {
      */
     template <typename T>
     class List {
+        struct ListNode;
+
     public:
 
-        friend std::ostream& operator<<(std::ostream& out, const List& list) {
-            out << "{ ";
-            for(const auto& val : list) {
-                out << val << ' ';
-            }
-            out << '}';
-            return out;
-        }
+        class ConstIterator {
+            friend List;
 
+        public:
 
-        friend bool operator==(const List& lhs, const List& rhs) noexcept {
-            if(lhs.size() != rhs.size()) {
-                return false;
+            friend bool operator==(const ConstIterator& lhs, const ConstIterator& rhs) noexcept {
+                return lhs.currentNode_ == rhs.currentNode_;
             }
 
-            for(auto rhsIt = rhs.begin(); const auto& val : lhs) {
-                if(val != *rhsIt) {
-                    return false;
-                }
-                rhsIt++;
+
+            ConstIterator(const ConstIterator&) noexcept = default;
+            ConstIterator& operator=(const ConstIterator&) noexcept = default;
+
+            ConstIterator(ConstIterator&&) noexcept = default;
+            ConstIterator& operator=(ConstIterator&&) noexcept = default;
+
+
+            ConstIterator() noexcept = default;
+            ~ConstIterator() = default;
+
+
+            ConstIterator& operator++() noexcept {
+                currentNode_ = currentNode_->next;
+                return *this;
             }
 
-            return true;
-        }
+            ConstIterator operator++(int) noexcept {
+                const auto it = *this;
+                operator++();
+                return it;
+            }
+
+
+            ConstIterator& operator--() noexcept {
+                currentNode_ = currentNode_->prev;
+                return *this;
+            }
+
+            ConstIterator operator--(int) noexcept {
+                const auto it = *this;
+                operator--();
+                return it;
+            }
+
+
+            const T& operator*() const noexcept {
+                return currentNode_->value;
+            }
+
+            const T* operator->() const noexcept {
+                return &operator*();
+            }
+
+
+        private:
+            ConstIterator(ListNode* node) noexcept
+                : currentNode_(node) {}
+
+            ListNode* currentNode_ = {};
+        };
+
+
+        class Iterator : public ConstIterator {
+        public:
+
+            Iterator& operator++() noexcept {
+                ConstIterator::operator++();
+                return *this;
+            }
+
+            Iterator operator++(int) noexcept {
+                const auto it = *this;
+                operator++();
+                return it;
+            }
+
+
+            Iterator& operator--() noexcept {
+                ConstIterator::operator--();
+                return *this;
+            }
+
+            Iterator operator--(int) noexcept {
+                const auto it = *this;
+                operator--();
+                return it;
+            }
+
+
+            T& operator*() const noexcept {
+                return const_cast<T&>(ConstIterator::operator*());
+            }
+
+            T* operator->() const noexcept {
+                return &operator*();
+            }
+
+
+        private:
+            using ConstIterator::ConstIterator;
+        };
 
 
         List(const List& other) {
@@ -51,32 +124,26 @@ namespace dsa {
             }
         }
 
-
         List& operator=(const List& other) {
-            assert(this != &other && "Self copy-assignment");
-
-            std::destroy_at(this);
-            std::construct_at(this, other);
-
+            auto copy = other;
+            std::swap(*this, copy);
             return *this;
         }
 
 
-        List(List&& other) noexcept {
-            other.head_.prev->next = &head_;
-            other.head_.next->prev = &head_;
+        List(List&& other) noexcept
+            : size_(std::exchange(other.size_, 0)) {
 
-            head_.next = other.head_.next;
-            head_.prev = other.head_.prev;
-            head_.value = other.head_.value;
+            auto* const last = other.head_.prev;
+            auto* const first = other.head_.next;
 
-            std::construct_at(&other);
+            last->next = static_cast<ListNode*>(&head_);
+            first->prev = static_cast<ListNode*>(&head_);
+
+            head_ = std::exchange(other.head_, other.makeListHead());
         }
 
-
         List& operator=(List&& other) noexcept {
-            assert(this != &other && "Self move-assignment");
-
             std::destroy_at(this);
             std::construct_at(this, std::move(other));
 
@@ -98,154 +165,120 @@ namespace dsa {
         }
 
 
-        /** @name Element insertion */
-        /** @{ */
-        void pushFront(const T& value) {
-            insertNode(value, head());
+        void pushFront(T value) {
+            insert(std::move(value), begin());
         }
 
-        void pushFront(T&& value) {
-            insertNode(std::move(value), head());
+        void pushBack(T value) {
+            insert(std::move(value), end());
         }
 
 
-        void pushBack(const T& value) {
-            insertNode(value, head()->prev);
-        }
-
-        void pushBack(T&& value) {
-            insertNode(std::move(value), head()->prev);
-        }
-        /** @} */
-
-
-        /** @name Element retrieval */
-        /** @{ */
-        T popFront() {
-            auto val = std::move(nodeAtHead()->value);
-            deleteNode(nodeAtHead());
+        T popFront() noexcept {
+            auto val = std::move(front());
+            erase(begin());
             return val;
         }
 
         const T& front() const noexcept {
-            return nodeAtHead()->value;
+            return const_cast<List*>(this)->front();
         }
 
         T& front() noexcept {
-            return nodeAtHead()->value;
+            return *begin();
         }
 
 
-        T popBack() {
-            auto val = std::move(nodeAtTail()->value);
-            deleteNode(nodeAtTail());
+        T popBack() noexcept {
+            auto val = std::move(back());
+            erase(--end());
             return val;
         }
 
         const T& back() const noexcept {
-            return nodeAtTail()->value;
+            return const_cast<List*>(this)->back();
         }
 
         T& back() noexcept {
-            return nodeAtTail()->value;
+            return *(--end());
         }
-        /** @} */
 
 
-        /** @name List state */
-        /** @{ */
         std::size_t size() const noexcept {
-            return head_.value;
+            return size_;
         }
 
         bool isEmpty() const noexcept {
             return size() == 0;
         }
 
-        void clear() {
+        void clear() noexcept {
             while(!isEmpty()) {
-                deleteNode(nodeAtTail());
+                erase(--end());
             }
         }
-        /** @} */
 
 
-        /** @name Iteration support */
-        /** @{ */
-        ListConstIterator<T> cbegin() const noexcept {
-            return begin();
-        }
-
-        ListConstIterator<T> begin() const noexcept {
+        ConstIterator begin() const noexcept {
             return const_cast<List*>(this)->begin();
         }
 
-        ListIterator<T> begin() noexcept {
-            return ListIterator(this, head()->next);
+        Iterator begin() noexcept {
+            return { head_.next };
         }
 
 
-        ListConstIterator<T> cend() const noexcept {
-            return end();
-        }
-
-        ListConstIterator<T> end() const noexcept {
+        ConstIterator end() const noexcept {
             return const_cast<List*>(this)->end();
         }
 
-        ListIterator<T> end() noexcept {
-            return ListIterator(this, head());
+        Iterator end() noexcept {
+            return { static_cast<ListNode*>(&head_) };
         }
-        /** @} */
 
 
     private:
 
-        template <typename S>
-        void insertNode(S&& value, ListNode<T>* prev) {
-            auto* const n = new ListNode<T>(prev, prev->next, std::forward<S>(value));
+        struct ListHeadNode {
+            ListNode* prev = {};
+            ListNode* next = {};
+        };
 
-            prev->next->prev = n;
-            prev->next = n;
+        struct ListNode : public ListHeadNode {
+            ListNode(T&& value, ListNode* next) noexcept
+                : ListHeadNode(next->prev, next), value(std::move(value)) {}
 
-            head_.value++;
+            T value;
+        };
+
+
+        void insert(T&& value, ConstIterator where) {
+            auto* const next = where.currentNode_;
+            auto n = std::make_unique<ListNode>(std::move(value), next);
+
+            next->prev->next = n.get();
+            next->prev = n.get();
+
+            n.release();
+            size_++;
         }
 
-        void deleteNode(ListNode<T>* n) {
+        void erase(ConstIterator where) noexcept {
+            const auto n = std::unique_ptr<ListNode>(where.currentNode_);
+
             n->prev->next = n->next;
             n->next->prev = n->prev;
-            head_.value--;
-
-            delete n;
+            size_--;
         }
 
 
-        ListNode<T>* nodeAtTail() const noexcept {
-            assert(!isEmpty() && "Attempting to read an element from the end of an empty list");
-            return head()->prev;
+        ListHeadNode makeListHead() noexcept {
+            const auto head = static_cast<ListNode*>(&head_);
+            return { head, head };
         }
 
-        ListNode<T>* nodeAtHead() const noexcept {
-            assert(!isEmpty() && "Attempting to read an element from the beginning of an empty list");
-            return head()->next;
-        }
-
-
-        ListNode<T>* head() noexcept {
-            return reinterpret_cast<ListNode<T>*>(&head_);
-        }
-
-        const ListNode<T>* head() const noexcept {
-            return const_cast<List*>(this)->head();
-        }
-
-
-        ListNode<std::size_t> makeListHead() noexcept {
-            return { &head_, &head_, 0 };
-        }
-
-
-        ListNode<std::size_t> head_ = makeListHead();
+        ListHeadNode head_ = makeListHead();
+        std::size_t size_ = 0;
     };
 
 }

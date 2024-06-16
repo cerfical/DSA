@@ -133,26 +133,6 @@ SCENARIO("elements can be removed from list", "[list]") {
 }
 
 
-SCENARIO("comparing lists", "[list]") {
-    GIVEN("two different lists") {
-        const auto list1 = List<int>{ 1, 2, 3 };
-        const auto list2 = List<int>{ 4, 3, 2, 1 };
-
-        THEN("the lists are not equal") {
-            REQUIRE(list1 != list2);
-        }
-    }
-
-    GIVEN("two equivalent lists") {
-        const auto list = List<int>{ 1, 2, 3 };
-
-        THEN("the lists are equal") {
-            REQUIRE(list == list);
-        }
-    }
-}
-
-
 SCENARIO("comparing list iterators", "[list][iterator]") {
     const auto list = List<int>{ 1, 2, 3 };
 

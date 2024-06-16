@@ -1,4 +1,4 @@
-﻿cmake_minimum_required(VERSION 3.23)
+cmake_minimum_required(VERSION 3.23)
 
 
 project(DSA LANGUAGES CXX DESCRIPTION "Classic data structures and algorithms")
@@ -16,9 +16,6 @@ target_sources(dsa INTERFACE FILE_SET HEADERS BASE_DIRS "include"
         "include/dsa/sort.hpp"
         "include/dsa/search.hpp"
         
-        "include/dsa/ListNode.hpp"
-        "include/dsa/ListConstIterator.hpp"
-        "include/dsa/ListIterator.hpp"
         "include/dsa/List.hpp"
     
         "include/dsa/Queue.hpp"
