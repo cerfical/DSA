@@ -24,7 +24,7 @@ target_sources(dsa INTERFACE FILE_SET HEADERS BASE_DIRS "include"
         "include/dsa/Queue.hpp"
         "include/dsa/Stack.hpp"
 
-        "include/dsa/HeapUtils.hpp"
+        "include/dsa/HeapUtil.hpp"
         "include/dsa/Heap.hpp"
 )
 

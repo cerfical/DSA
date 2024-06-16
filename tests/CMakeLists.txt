@@ -16,13 +16,16 @@ add_executable(dsa-tests
     "SearchTest.cpp"
     "SortTest.cpp"
 
-    "HeapUtilsTest.cpp"
+    "HeapUtilTest.cpp"
     "ListTest.cpp"
 
-    "AdapterTest.hpp"
     "HeapTest.cpp"
     "QueueTest.cpp"
     "StackTest.cpp"
+)
+
+target_sources(dsa-tests INTERFACE FILE_SET HEADERS
+    FILES "AdapterTest.hpp"    
 )
 
 target_link_libraries(dsa-tests

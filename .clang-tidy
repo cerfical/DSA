@@ -12,8 +12,10 @@ Checks:
   - -modernize-use-nodiscard
   - -modernize-use-trailing-return-type
   - -readability-identifier-length
+  - -readability-implicit-bool-conversion
   - -readability-named-parameter
   - -readability-uppercase-literal-suffix
+
 
 CheckOptions:
   # All type-defining constructs are always in `CamelCase`
