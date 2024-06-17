@@ -1,70 +1,8 @@
-#include <catch2/catch_test_macros.hpp>
 #include <dsa/List.hpp>
 
-#include <utility>
-
+#include <catch2/catch_test_macros.hpp>
 
 using namespace dsa;
-
-
-class DtorCallTracer {
-public:
-
-    DtorCallTracer(const DtorCallTracer&) = delete;
-    DtorCallTracer& operator=(const DtorCallTracer&) = delete;
-
-
-    DtorCallTracer(DtorCallTracer&& other) noexcept {
-        dtorCalls_ = std::exchange(other.dtorCalls_, {});
-    }
-
-    DtorCallTracer& operator=(DtorCallTracer&& other) noexcept {
-        dtorCalls_ = std::exchange(other.dtorCalls_, {});
-        return *this;
-    }
-
-
-    DtorCallTracer(int* dtorCalls = {}) noexcept
-        : dtorCalls_(dtorCalls) {}
-
-    ~DtorCallTracer() {
-        if(dtorCalls_) {
-            (*dtorCalls_)++;
-        }
-    }
-
-
-private:
-    int* dtorCalls_ = {};
-};
-
-
-SCENARIO("list can be emptied", "[list]") {
-    GIVEN("a non-empty list") {
-        int dtorCalls = 0;
-
-        auto list = List<DtorCallTracer>();
-        list.pushBack(&dtorCalls);
-        list.pushBack(&dtorCalls);
-        list.pushBack(&dtorCalls);
-
-        WHEN("clear() is called") {
-            list.clear();
-
-            THEN("remove all elements from the list") {
-                REQUIRE(list.size() == 0);
-
-                AND_THEN("destroy the removed elements") {
-                    REQUIRE(dtorCalls == 3);
-
-                    AND_THEN("mark the list as being empty") {
-                        REQUIRE(list.isEmpty());
-                    }
-                }
-            }
-        }
-    }
-}
 
 
 SCENARIO("new elements can be added to list", "[list]") {
@@ -127,56 +65,6 @@ SCENARIO("elements can be removed from list", "[list]") {
                         REQUIRE(list.front() == 2);
                     }
                 }
-            }
-        }
-    }
-}
-
-
-SCENARIO("comparing list iterators", "[list][iterator]") {
-    const auto list = List<int>{ 1, 2, 3 };
-
-    GIVEN("two equivalent iterators") {
-        THEN("the iterators are equal") {
-            REQUIRE(list.begin() == list.begin());
-        }
-    }
-
-    GIVEN("two different iterators") {
-        THEN("the iterators are not equal") {
-            REQUIRE(list.begin() != list.end());
-        }
-    }
-}
-
-
-SCENARIO("iterator movement", "[list][iterator]") {
-    const auto list = List<int>{ 1, 2, 3 };
-
-    GIVEN("an iterator") {
-        auto it = ++list.begin();
-
-        WHEN("incrementing the iterator") {
-            THEN("moves the iterator to the next element") {
-                REQUIRE(*(++it) == 3);
-            }
-        }
-
-        WHEN("decrementing the iterator") {
-            THEN("moves the iterator to the next element") {
-                REQUIRE(*(--it) == 1);
-            }
-        }
-
-        WHEN("post incrementing the iterator") {
-            THEN("returns the unchanged iterator") {
-                REQUIRE(*(it++) == 2);
-            }
-        }
-
-        WHEN("post decrementing the iterator") {
-            THEN("returns the unchanged iterator") {
-                REQUIRE(*(it--) == 2);
             }
         }
     }

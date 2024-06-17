@@ -110,7 +110,8 @@ IncludeCategories:
   
   # System includes
     # Third party libraries
-  - { Regex: '<.*(/.*|\.h|\.hpp)>', Priority: 10 }
+  - { Regex: '<dsa/.*\.hpp>', Priority: 10 }
+  - { Regex: '<.*(/.*|\.h|\.hpp)>', Priority: 11 }
 
     # Standard library
   - { Regex: '<.*>', Priority: 11 }

@@ -6,7 +6,9 @@ Checks:
   - modernize-*
   - performance-*
   - readability-*
+
   - -bugprone-easily-swappable-parameters
+  - -cppcoreguidelines-prefer-member-initializer
   - -cppcoreguidelines-pro-bounds-constant-array-index
   - -cppcoreguidelines-pro-type-const-cast
   - -modernize-use-nodiscard
@@ -15,6 +17,11 @@ Checks:
   - -readability-implicit-bool-conversion
   - -readability-named-parameter
   - -readability-uppercase-literal-suffix
+
+  # reinterpret_cast() and C-style arrays are sometimes necessary to implement data structures
+  - -cppcoreguidelines-avoid-c-arrays
+  - -cppcoreguidelines-pro-type-reinterpret-cast
+  - -modernize-avoid-c-arrays
 
 
 CheckOptions:

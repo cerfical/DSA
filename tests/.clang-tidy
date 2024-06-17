@@ -3,6 +3,6 @@ InheritParentConfig: true
 # Since tests are written to be readable and simple, 
 # they often break some of the rules, so disable affected checks to get rid of unnecessary warnings
 Checks:
-  # Allow initialization of test data with numeric literals
   - -cppcoreguidelines-avoid-magic-numbers
+  - -cppcoreguidelines-macro-usage
   - -readability-magic-numbers
