@@ -1,10 +1,5 @@
-ColumnLimit: 120
+ColumnLimit: 0
 Language: Cpp
-
-# Penalty tweaks
-PenaltyBreakBeforeFirstCallParameter: 20
-PenaltyExcessCharacter: 10
-PenaltyReturnTypeOnItsOwnLine: 1000
 
 AlignAfterOpenBracket: BlockIndent
 AlignArrayOfStructures: Right
@@ -103,7 +98,6 @@ RemoveSemicolon: true
 
 # Put class header includes first
 SortIncludes: CaseSensitive
-
 IncludeBlocks: Regroup
 IncludeCategories:
   - { Regex: '".*"', Priority: 1 }
@@ -114,4 +108,4 @@ IncludeCategories:
   - { Regex: '<.*(/.*|\.h|\.hpp)>', Priority: 11 }
 
     # Standard library
-  - { Regex: '<.*>', Priority: 11 }
+  - { Regex: '<.*>', Priority: 20 }

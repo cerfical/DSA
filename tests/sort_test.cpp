@@ -1,16 +1,18 @@
+#include <dsa/sort.hpp>
+
 #include <catch2/catch_template_test_macros.hpp>
 #include <catch2/catch_test_macros.hpp>
 #include <catch2/matchers/catch_matchers.hpp>
 #include <catch2/matchers/catch_matchers_range_equals.hpp>
 #include <catch2/matchers/catch_matchers_vector.hpp>
-#include <dsa/sort.hpp>
 
 #include <vector>
+
 
 #define SORT_SCENARIO(testName) \
     TEMPLATE_TEST_CASE( \
         "Scenario: " testName, \
-        "[sort][algo]", \
+        "[sort]", \
         BubbleSort, \
         SelectionSort, \
         InsertionSort, \

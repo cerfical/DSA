@@ -2,12 +2,12 @@
 
 #include <catch2/catch_test_macros.hpp>
 
-using namespace dsa;
 
+static constexpr const auto* VectorTags = "[vector]";
 
-SCENARIO("new elements can be added to vector", "[vector]") {
+SCENARIO("new elements can be added to vector", VectorTags) {
     GIVEN("a vector") {
-        auto vec = Vector<int>{ 1, 2, 3 };
+        auto vec = dsa::Vector{ 1, 2, 3 };
 
         WHEN("pushBack() is called") {
             vec.pushBack(12);
@@ -24,9 +24,9 @@ SCENARIO("new elements can be added to vector", "[vector]") {
 }
 
 
-SCENARIO("elements can be removed from vector", "[vector]") {
+SCENARIO("elements can be removed from vector", VectorTags) {
     GIVEN("a non-empty vector") {
-        auto vec = Vector<int>{ 1, 2, 3 };
+        auto vec = dsa::Vector{ 1, 2, 3 };
 
         WHEN("popBack() is called") {
             THEN("return the last element in the vector") {
@@ -45,9 +45,9 @@ SCENARIO("elements can be removed from vector", "[vector]") {
 }
 
 
-SCENARIO("manipulating vector capacity", "[vector]") {
+SCENARIO("manipulating vector capacity", VectorTags) {
     GIVEN("a vector") {
-        auto vec = Vector<int>();
+        auto vec = dsa::Vector<int>();
 
         AND_GIVEN("a capacity greater than the current one") {
             const auto newCapacity = 10;

@@ -1,18 +1,12 @@
 #include <dsa/List.hpp>
-#include <dsa/Vector.hpp>
 
-#include <catch2/catch_template_test_macros.hpp>
 #include <catch2/catch_test_macros.hpp>
 
 
-using List = dsa::List<int>;
-using Vector = dsa::Vector<int>;
+static constexpr const auto* ListIteratorTags = "[list][iterator]";
 
-#define ITERATOR_SCENARIO(testName) TEMPLATE_TEST_CASE("Scenario: " testName, "[iterator]", List, Vector)
-
-
-ITERATOR_SCENARIO("comparing iterators") {
-    const auto cont = TestType{ 1, 2, 3 };
+SCENARIO("comparing iterators", ListIteratorTags) {
+    const auto cont = dsa::List{ 1, 2, 3 };
 
     GIVEN("two equivalent iterators") {
         THEN("the iterators are equal") {
@@ -28,8 +22,8 @@ ITERATOR_SCENARIO("comparing iterators") {
 }
 
 
-ITERATOR_SCENARIO("iterator movement") {
-    const auto cont = TestType{ 1, 2, 3 };
+SCENARIO("iterator movement", ListIteratorTags) {
+    const auto cont = dsa::List{ 1, 2, 3 };
 
     GIVEN("an iterator") {
         auto it = ++cont.begin();

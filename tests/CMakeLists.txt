@@ -17,8 +17,10 @@ add_executable(dsa-tests
     "sort_test.cpp"
 
     "list_test.cpp"
-    "iterator_test.cpp"
+    "list_iterator_test.cpp"
+    
     "vector_test.cpp"
+    "vector_iterator_test.cpp"
 
     "heap_test.cpp"
     "queue_test.cpp"

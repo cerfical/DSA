@@ -1,13 +1,14 @@
+#include <dsa/search.hpp>
+
 #include <catch2/catch_template_test_macros.hpp>
 #include <catch2/catch_test_macros.hpp>
-#include <dsa/search.hpp>
 
 #include <optional>
 #include <vector>
 
 
 #define SEARCH_SCENARIO(testName) \
-    TEMPLATE_TEST_CASE("Scenario: " testName, "[search][algo]", LinearSearch, BinarySearch)
+    TEMPLATE_TEST_CASE("Scenario: " testName, "[search]", LinearSearch, BinarySearch)
 
 
 struct BinarySearch {

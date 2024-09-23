@@ -1,5 +1,7 @@
-#include <catch2/catch_test_macros.hpp>
 #include <dsa/Stack.hpp>
+
+#include <catch2/catch_test_macros.hpp>
+
 
 SCENARIO("manipulating stack elements", "[stack]") {
     GIVEN("a stack") {

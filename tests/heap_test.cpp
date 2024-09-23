@@ -1,7 +1,11 @@
-#include <catch2/catch_test_macros.hpp>
 #include <dsa/Heap.hpp>
 
-SCENARIO("manipulating heap elements", "[heap]") {
+#include <catch2/catch_test_macros.hpp>
+
+
+static constexpr const auto* HeapTags = "[heap]";
+
+SCENARIO("manipulating heap elements", HeapTags) {
     GIVEN("a heap") {
         auto heap = dsa::Heap<int>();
         heap.push(47);

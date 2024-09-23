@@ -1,5 +1,7 @@
-#include <catch2/catch_test_macros.hpp>
 #include <dsa/Queue.hpp>
+
+#include <catch2/catch_test_macros.hpp>
+
 
 SCENARIO("manipulating queue elements", "[queue]") {
     GIVEN("a queue") {

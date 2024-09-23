@@ -2,12 +2,12 @@
 
 #include <catch2/catch_test_macros.hpp>
 
-using namespace dsa;
 
+static constexpr const auto* ListTags = "[list]";
 
-SCENARIO("new elements can be added to list", "[list]") {
+SCENARIO("new elements can be added to list", ListTags) {
     GIVEN("a list") {
-        auto list = List<int>{ 1, 2, 3 };
+        auto list = dsa::List{ 1, 2, 3 };
 
         WHEN("pushBack() is called") {
             list.pushBack(12);
@@ -36,9 +36,9 @@ SCENARIO("new elements can be added to list", "[list]") {
 }
 
 
-SCENARIO("elements can be removed from list", "[list]") {
+SCENARIO("elements can be removed from list", ListTags) {
     GIVEN("a non-empty list") {
-        auto list = List<int>{ 1, 2, 3 };
+        auto list = dsa::List{ 1, 2, 3 };
 
         WHEN("popBack() is called") {
             THEN("return the last element in the list") {
