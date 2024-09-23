@@ -17,11 +17,11 @@ namespace dsa {
      * @brief Sorts a range of values in @f$O(n^2)@f$ time.
      */
     export template <std::ranges::random_access_range R>
-    void bubbleSort(R&& range) {
-        for(auto it1 = range.end(); it1 != range.begin(); it1--) {
+    void bubbleSort(R& rng) {
+        for(auto it1 = std::ranges::end(rng); it1 != std::ranges::begin(rng); it1--) {
             bool sorted = true;
 
-            for(auto it2 = range.begin(); it2 != it1 - 1; it2++) {
+            for(auto it2 = std::ranges::begin(rng); it2 != it1 - 1; it2++) {
                 if(*(it2 + 1) < *it2) {
                     std::iter_swap(it2 + 1, it2);
                     sorted = false;
@@ -40,9 +40,9 @@ namespace dsa {
      * @brief Sorts a range of values in @f$O(n^2)@f$ time.
      */
     export template <std::ranges::random_access_range R>
-    void selectionSort(R&& range) {
-        for(auto it = range.begin(); it != range.end(); it++) {
-            std::iter_swap(it, std::min_element(it, range.end()));
+    void selectionSort(R& rng) {
+        for(auto it = std::ranges::begin(rng); it != std::ranges::end(rng); it++) {
+            std::iter_swap(it, std::min_element(it, std::ranges::end(rng)));
         }
     }
 
@@ -51,13 +51,13 @@ namespace dsa {
      * @brief Sorts a range of values in @f$O(n^2)@f$ time.
      */
     export template <std::ranges::random_access_range R>
-    void insertionSort(R&& range) {
-        for(auto it = range.begin(); it != range.end(); it++) {
+    void insertionSort(R& rng) {
+        for(auto it = std::ranges::begin(rng); it != std::ranges::end(rng); it++) {
             auto key = std::move(*it);
             auto insertPos = it;
 
             // find the right place to insert the value
-            while(insertPos != range.begin() && *(insertPos - 1) > key) {
+            while(insertPos != std::ranges::begin(rng) && *(insertPos - 1) > key) {
                 *insertPos = std::move(*(insertPos - 1));
                 insertPos--;
             }
@@ -71,16 +71,16 @@ namespace dsa {
      * @brief Performs a recursive sort in @f$O(n * \lg n)@f$ time, using extra memory.
      */
     export template <std::ranges::random_access_range R>
-    void mergeSort(R&& range) {
-        const auto size = std::ranges::size(range);
+    void mergeSort(R& rng) {
+        const auto size = std::ranges::size(rng);
         if(size <= 1) {
             return;
         }
 
         // split the range into two halves and sort them independently
-        const auto mid = range.begin() + size / 2;
-        auto left = std::ranges::subrange(range.begin(), mid);
-        auto right = std::ranges::subrange(mid, range.end());
+        const auto mid = std::ranges::begin(rng) + (size / 2);
+        auto left = std::ranges::subrange(std::ranges::begin(rng), mid);
+        auto right = std::ranges::subrange(mid, std::ranges::end(rng));
 
         mergeSort(left);
         mergeSort(right);
@@ -104,7 +104,7 @@ namespace dsa {
         std::ranges::move(left, std::back_inserter(result));
         std::ranges::move(right, std::back_inserter(result));
 
-        std::ranges::move(result, range.begin());
+        std::ranges::move(result, std::ranges::begin(rng));
     }
 
 
@@ -112,16 +112,16 @@ namespace dsa {
      * @brief Performs a recursive in-place sort in @f$O(n * \lg n)@f$ time on average.
      */
     export template <std::ranges::random_access_range R>
-    void quickSort(R&& range) {
-        const auto size = std::ranges::size(range);
+    void quickSort(R& rng) {
+        const auto size = std::ranges::size(rng);
         if(size < 2) {
             return;
         }
 
-        const auto pivotPos = range.end() - 1;
+        const auto pivotPos = std::ranges::end(rng) - 1;
         auto pivot = std::move(*pivotPos);
 
-        auto lessPos = range.begin();
+        auto lessPos = std::ranges::begin(rng);
         auto greaterPos = pivotPos;
 
         // move elements less than the pivot to the beginning of the range, other elements are moved to the end
@@ -134,13 +134,13 @@ namespace dsa {
             }
         }
 
-        const auto less = std::ranges::subrange(range.begin(), lessPos);
+        const auto less = std::ranges::subrange(std::ranges::begin(rng), lessPos);
         const auto greater = std::ranges::subrange(lessPos, pivotPos);
 
         quickSort(less);
         quickSort(greater);
 
-        std::ranges::move_backward(greater, range.end());
+        std::ranges::move_backward(greater, std::ranges::end(rng));
         *greaterPos = std::move(pivot);
     }
 
@@ -149,14 +149,15 @@ namespace dsa {
      * @brief Performs an in-place sort in @f$O(n * \lg n)@f$.
      */
     export template <std::ranges::random_access_range R>
-    void heapSort(R&& range) {
-        heap_util::createHeap(range);
+    void heapSort(R& rng) {
+        heap_util::createHeap(rng);
 
-        const auto heapStart = std::ranges::begin(range);
-        auto heapEnd = std::ranges::end(range);
+        const auto heapStart = std::ranges::begin(rng);
+        auto heapEnd = std::ranges::end(rng);
 
         while(heapEnd != heapStart) {
-            auto value = heap_util::extractTop(std::ranges::subrange(heapStart, heapEnd));
+            auto heap = std::ranges::subrange(heapStart, heapEnd);
+            auto value = heap_util::extractTop(heap);
             heapEnd--;
 
             *heapEnd = std::move(value);

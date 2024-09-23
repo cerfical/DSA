@@ -13,13 +13,14 @@ namespace dsa {
      * @brief Performs an ordinary linear search on a range of values in @f$O(n)@f$ time.
      */
     export template <std::ranges::forward_range R, typename T>
-    auto linearSearch(R&& range, T&& searchValue) {
-        for(auto it = range.begin(); it != range.end(); it++) {
-            if(*it == searchValue) {
+    auto linearSearch(const R& rng, const T& val) {
+        const auto end = std::ranges::end(rng);
+        for(auto it = std::ranges::begin(rng); it != end; it++) {
+            if(*it == val) {
                 return it;
             }
         }
-        return range.end();
+        return end;
     }
 
 
@@ -27,26 +28,25 @@ namespace dsa {
      * @brief Performs an iterative binary search on a sorted range of values in @f$O(\lg n)@f$ time.
      */
     export template <std::ranges::forward_range R, typename T>
-    auto binarySearch(R&& range, T&& searchValue) {
-        auto left = range.begin();
-        auto right = range.end();
+    auto binarySearch(const R& rng, const T& val) {
+        const auto end = std::ranges::end(rng);
+        auto left = std::ranges::begin(rng);
+        auto right = end;
 
         while(left != right) {
-            const auto mid = left + std::distance(left, right) / 2;
-            const auto& value = *mid;
-
-            if(value == searchValue) {
+            const auto mid = left + (std::distance(left, right) / 2);
+            if(*mid == val) {
                 return mid;
             }
 
-            if(value > searchValue) {
+            if(*mid > val) {
                 right = mid;
-            } else if(value < searchValue) {
+            } else if(*mid < val) {
                 left = mid + 1;
             }
         }
 
-        return range.end();
+        return end;
     }
     /** @} */
 

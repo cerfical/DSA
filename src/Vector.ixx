@@ -3,6 +3,7 @@ module;
 #include <algorithm>
 #include <cstddef>
 #include <initializer_list>
+#include <iterator>
 #include <memory>
 #include <type_traits>
 
@@ -22,51 +23,54 @@ namespace dsa {
 
         public:
 
-            friend bool operator==(const ConstIterator& lhs, const ConstIterator& rhs) noexcept {
+            [[nodiscard]]
+            friend auto operator==(const ConstIterator& lhs, const ConstIterator& rhs) noexcept -> bool {
                 return lhs.pos_ == rhs.pos_;
             }
 
 
             ConstIterator(const ConstIterator&) noexcept = default;
-            ConstIterator& operator=(const ConstIterator&) noexcept = default;
+            auto operator=(const ConstIterator&) noexcept -> ConstIterator& = default;
 
             ConstIterator(ConstIterator&&) noexcept = default;
-            ConstIterator& operator=(ConstIterator&&) noexcept = default;
+            auto operator=(ConstIterator&&) noexcept -> ConstIterator& = default;
 
 
             ConstIterator() noexcept = default;
             ~ConstIterator() = default;
 
 
-            ConstIterator& operator++() noexcept {
-                pos_++;
+            auto operator++() noexcept -> ConstIterator& {
+                pos_ = std::next(pos_);
                 return *this;
             }
 
-            ConstIterator operator++(int) noexcept {
+            auto operator++(int) noexcept -> ConstIterator {
                 const auto it = *this;
                 operator++();
                 return it;
             }
 
 
-            ConstIterator& operator--() noexcept {
-                pos_--;
+            auto operator--() noexcept -> ConstIterator& {
+                pos_ = std::prev(pos_);
                 return *this;
             }
 
-            ConstIterator operator--(int) noexcept {
+            auto operator--(int) noexcept -> ConstIterator {
                 const auto it = *this;
                 operator--();
                 return it;
             }
 
 
-            const T& operator*() const noexcept {
+            [[nodiscard]]
+            auto operator*() const noexcept -> const T& {
                 return *pos_;
             }
 
-            const T* operator->() const noexcept {
+            [[nodiscard]]
+            auto operator->() const noexcept -> const T* {
                 return &operator*();
             }
 
@@ -82,35 +86,37 @@ namespace dsa {
         class Iterator : public ConstIterator {
         public:
 
-            Iterator& operator++() noexcept {
+            auto operator++() noexcept -> Iterator& {
                 ConstIterator::operator++();
                 return *this;
             }
 
-            Iterator operator++(int) noexcept {
+            auto operator++(int) noexcept -> Iterator {
                 const auto it = *this;
                 operator++();
                 return it;
             }
 
 
-            Iterator& operator--() noexcept {
+            auto operator--() noexcept -> Iterator& {
                 ConstIterator::operator--();
                 return *this;
             }
 
-            Iterator operator--(int) noexcept {
+            auto operator--(int) noexcept -> Iterator {
                 const auto it = *this;
                 operator--();
                 return it;
             }
 
 
-            T& operator*() const noexcept {
+            [[nodiscard]]
+            auto operator*() const noexcept -> T& {
                 return const_cast<T&>(ConstIterator::operator*());
             }
 
-            T* operator->() const noexcept {
+            [[nodiscard]]
+            auto operator->() const noexcept -> T* {
                 return &operator*();
             }
 
@@ -126,7 +132,7 @@ namespace dsa {
             std::copy(other.data(), other.data() + other.size(), data());
         }
 
-        Vector& operator=(const Vector& other) {
+        auto operator=(const Vector& other) -> Vector& {
             auto copy = other;
             std::swap(*this, copy);
             return *this;
@@ -138,7 +144,7 @@ namespace dsa {
             , size_(std::exchange(other.size_, 0))
             , capacity_(std::exchange(other.capacity_, 0)) {}
 
-        Vector& operator=(Vector&& other) noexcept {
+        auto operator=(Vector&& other) noexcept -> Vector& {
             std::destroy_at(this);
             std::construct_at(this, std::move(other));
 
@@ -147,8 +153,8 @@ namespace dsa {
 
 
         Vector(std::initializer_list<T> values) {
-            for(const auto& v : values) {
-                pushBack(v);
+            for(const auto& value : values) {
+                pushBack(value);
             }
         }
 
@@ -171,7 +177,8 @@ namespace dsa {
             }
         }
 
-        std::size_t capacity() const noexcept {
+        [[nodiscard]]
+        auto capacity() const noexcept -> std::size_t {
             return capacity_;
         }
 
@@ -180,45 +187,54 @@ namespace dsa {
             insert(std::move(value), end());
         }
 
-        T popBack() noexcept {
+        [[nodiscard]]
+        auto popBack() noexcept -> T {
             auto val = std::move(back());
             erase(--end());
             return val;
         }
 
 
-        const T& front() const noexcept {
+        [[nodiscard]]
+        auto front() const noexcept -> const T& {
             return const_cast<Vector*>(this)->front();
         }
 
-        T& front() noexcept {
+        [[nodiscard]]
+        auto front() noexcept -> T& {
             return *begin();
         }
 
 
-        const T& back() const noexcept {
+        [[nodiscard]]
+        auto back() const noexcept -> const T& {
             return const_cast<Vector*>(this)->back();
         }
 
-        T& back() noexcept {
+        [[nodiscard]]
+        auto back() noexcept -> T& {
             return *(--end());
         }
 
 
-        ConstIterator begin() const noexcept {
+        [[nodiscard]]
+        auto begin() const noexcept -> ConstIterator {
             return const_cast<Vector*>(this)->begin();
         }
 
-        Iterator begin() noexcept {
+        [[nodiscard]]
+        auto begin() noexcept -> Iterator {
             return { data() };
         }
 
 
-        ConstIterator end() const noexcept {
+        [[nodiscard]]
+        auto end() const noexcept -> ConstIterator {
             return const_cast<Vector*>(this)->end();
         }
 
-        Iterator end() noexcept {
+        [[nodiscard]]
+        auto end() noexcept -> Iterator {
             return { data() + size_ };
         }
 
@@ -229,11 +245,13 @@ namespace dsa {
             }
         }
 
-        bool isEmpty() const noexcept {
+        [[nodiscard]]
+        auto isEmpty() const noexcept -> bool {
             return size() == 0;
         }
 
-        std::size_t size() const noexcept {
+        [[nodiscard]]
+        auto size() const noexcept -> std::size_t {
             return size_;
         }
 
@@ -263,11 +281,13 @@ namespace dsa {
         }
 
 
-        const T* data() const noexcept {
+        [[nodiscard]]
+        auto data() const noexcept -> const T* {
             return const_cast<Vector*>(this)->data();
         }
 
-        T* data() noexcept {
+        [[nodiscard]]
+        auto data() noexcept -> T* {
             return reinterpret_cast<T*>(data_.get());
         }
 

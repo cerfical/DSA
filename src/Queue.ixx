@@ -17,20 +17,26 @@ namespace dsa {
 
         /** @name Element insertion/retrieval */
         /** @{ */
-        const T& front() const noexcept {
+        [[nodiscard]]
+        auto front() const noexcept -> const T& {
             return data_.front();
         }
 
-        const T& back() const noexcept {
+
+        [[nodiscard]]
+        auto back() const noexcept -> const T& {
             return data_.back();
         }
 
 
-        T& front() noexcept {
+        [[nodiscard]]
+        auto front() noexcept -> T& {
             return data_.front();
         }
 
-        T& back() noexcept {
+
+        [[nodiscard]]
+        auto back() noexcept -> T& {
             return data_.back();
         }
 
@@ -39,11 +45,14 @@ namespace dsa {
             data_.push_back(value);
         }
 
+
         void push(T&& value) {
             data_.push_back(std::move(value));
         }
 
-        T pop() {
+
+        [[nodiscard]]
+        auto pop() noexcept -> T {
             auto value = std::move(data_.front());
             data_.pop_front();
             return value;
@@ -53,11 +62,14 @@ namespace dsa {
 
         /** @name Queue size */
         /** @{ */
-        std::size_t size() const noexcept {
+        [[nodiscard]]
+        auto size() const noexcept -> std::size_t {
             return data_.size();
         }
 
-        bool isEmpty() const noexcept {
+
+        [[nodiscard]]
+        auto isEmpty() const noexcept -> bool {
             return size() == 0;
         }
         /** @} */

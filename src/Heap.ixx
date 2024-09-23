@@ -19,21 +19,26 @@ namespace dsa {
 
         /** @name Element insertion/retrieval */
         /** @{ */
-        const T& top() const noexcept {
+        [[nodiscard]]
+        auto top() const noexcept -> const T& {
             return data_.front();
         }
+
 
         void push(const T& value) {
             data_.push_back(value);
             heap_util::insertLast(data_);
         }
 
+
         void push(T&& value) {
             data_.push_back(std::move(value));
             heap_util::insertLast(data_);
         }
 
-        T pop() {
+
+        [[nodiscard]]
+        auto pop() noexcept -> T {
             auto value = heap_util::extractTop(data_);
             data_.pop_back();
             return value;
@@ -43,11 +48,14 @@ namespace dsa {
 
         /** @name Heap size */
         /** @{ */
-        std::size_t size() const noexcept {
+        [[nodiscard]]
+        auto size() const noexcept -> std::size_t {
             return data_.size();
         }
 
-        bool isEmpty() const noexcept {
+
+        [[nodiscard]]
+        auto isEmpty() const noexcept -> bool {
             return size() == 0;
         }
         /** @} */

@@ -23,51 +23,54 @@ namespace dsa {
 
         public:
 
-            friend bool operator==(const ConstIterator& lhs, const ConstIterator& rhs) noexcept {
+            [[nodiscard]]
+            friend auto operator==(const ConstIterator& lhs, const ConstIterator& rhs) noexcept -> bool {
                 return lhs.currentNode_ == rhs.currentNode_;
             }
 
 
             ConstIterator(const ConstIterator&) noexcept = default;
-            ConstIterator& operator=(const ConstIterator&) noexcept = default;
+            auto operator=(const ConstIterator&) noexcept -> ConstIterator& = default;
 
             ConstIterator(ConstIterator&&) noexcept = default;
-            ConstIterator& operator=(ConstIterator&&) noexcept = default;
+            auto operator=(ConstIterator&&) noexcept -> ConstIterator& = default;
 
 
             ConstIterator() noexcept = default;
             ~ConstIterator() = default;
 
 
-            ConstIterator& operator++() noexcept {
+            auto operator++() noexcept -> ConstIterator& {
                 currentNode_ = currentNode_->next;
                 return *this;
             }
 
-            ConstIterator operator++(int) noexcept {
+            auto operator++(int) noexcept -> ConstIterator {
                 const auto it = *this;
                 operator++();
                 return it;
             }
 
 
-            ConstIterator& operator--() noexcept {
+            auto operator--() noexcept -> ConstIterator& {
                 currentNode_ = currentNode_->prev;
                 return *this;
             }
 
-            ConstIterator operator--(int) noexcept {
+            auto operator--(int) noexcept -> ConstIterator {
                 const auto it = *this;
                 operator--();
                 return it;
             }
 
 
-            const T& operator*() const noexcept {
+            [[nodiscard]]
+            auto operator*() const noexcept -> const T& {
                 return currentNode_->value;
             }
 
-            const T* operator->() const noexcept {
+            [[nodiscard]]
+            auto operator->() const noexcept -> const T* {
                 return &operator*();
             }
 
@@ -83,35 +86,37 @@ namespace dsa {
         class Iterator : public ConstIterator {
         public:
 
-            Iterator& operator++() noexcept {
+            auto operator++() noexcept -> Iterator& {
                 ConstIterator::operator++();
                 return *this;
             }
 
-            Iterator operator++(int) noexcept {
+            auto operator++(int) noexcept -> Iterator {
                 const auto it = *this;
                 operator++();
                 return it;
             }
 
 
-            Iterator& operator--() noexcept {
+            auto operator--() noexcept -> Iterator& {
                 ConstIterator::operator--();
                 return *this;
             }
 
-            Iterator operator--(int) noexcept {
+            auto operator--(int) noexcept -> Iterator {
                 const auto it = *this;
                 operator--();
                 return it;
             }
 
 
-            T& operator*() const noexcept {
+            [[nodiscard]]
+            auto operator*() const noexcept -> T& {
                 return const_cast<T&>(ConstIterator::operator*());
             }
 
-            T* operator->() const noexcept {
+            [[nodiscard]]
+            auto operator->() const noexcept -> T* {
                 return &operator*();
             }
 
@@ -122,12 +127,12 @@ namespace dsa {
 
 
         List(const List& other) {
-            for(const auto& val : other) {
-                pushBack(val);
+            for(const auto& value : other) {
+                pushBack(value);
             }
         }
 
-        List& operator=(const List& other) {
+        auto operator=(const List& other) -> List& {
             auto copy = other;
             std::swap(*this, copy);
             return *this;
@@ -146,7 +151,7 @@ namespace dsa {
             head_ = std::exchange(other.head_, other.makeListHead());
         }
 
-        List& operator=(List&& other) noexcept {
+        auto operator=(List&& other) noexcept -> List& {
             std::destroy_at(this);
             std::construct_at(this, std::move(other));
 
@@ -155,8 +160,8 @@ namespace dsa {
 
 
         List(std::initializer_list<T> values) {
-            for(const auto& v : values) {
-                pushBack(v);
+            for(const auto& value : values) {
+                pushBack(value);
             }
         }
 
@@ -177,41 +182,49 @@ namespace dsa {
         }
 
 
-        T popFront() noexcept {
-            auto val = std::move(front());
+        [[nodiscard]]
+        auto popFront() noexcept -> T {
+            auto value = std::move(front());
             erase(begin());
-            return val;
+            return value;
         }
 
-        const T& front() const noexcept {
+        [[nodiscard]]
+        auto front() const noexcept -> const T& {
             return const_cast<List*>(this)->front();
         }
 
-        T& front() noexcept {
+        [[nodiscard]]
+        auto front() noexcept -> T& {
             return *begin();
         }
 
 
-        T popBack() noexcept {
-            auto val = std::move(back());
+        [[nodiscard]]
+        auto popBack() noexcept -> T {
+            auto value = std::move(back());
             erase(--end());
-            return val;
+            return value;
         }
 
-        const T& back() const noexcept {
+        [[nodiscard]]
+        auto back() const noexcept -> const T& {
             return const_cast<List*>(this)->back();
         }
 
-        T& back() noexcept {
+        [[nodiscard]]
+        auto back() noexcept -> T& {
             return *(--end());
         }
 
 
-        std::size_t size() const noexcept {
+        [[nodiscard]]
+        auto size() const noexcept -> std::size_t {
             return size_;
         }
 
-        bool isEmpty() const noexcept {
+        [[nodiscard]]
+        auto isEmpty() const noexcept -> bool {
             return size() == 0;
         }
 
@@ -222,20 +235,24 @@ namespace dsa {
         }
 
 
-        ConstIterator begin() const noexcept {
+        [[nodiscard]]
+        auto begin() const noexcept -> ConstIterator {
             return const_cast<List*>(this)->begin();
         }
 
-        Iterator begin() noexcept {
+        [[nodiscard]]
+        auto begin() noexcept -> Iterator {
             return { head_.next };
         }
 
 
-        ConstIterator end() const noexcept {
+        [[nodiscard]]
+        auto end() const noexcept -> ConstIterator {
             return const_cast<List*>(this)->end();
         }
 
-        Iterator end() noexcept {
+        [[nodiscard]]
+        auto end() noexcept -> Iterator {
             return { static_cast<ListNode*>(&head_) };
         }
 
@@ -257,25 +274,25 @@ namespace dsa {
 
         void insert(T&& value, ConstIterator where) {
             auto* const next = where.currentNode_;
-            auto n = std::make_unique<ListNode>(std::move(value), next);
+            auto node = std::make_unique<ListNode>(std::move(value), next);
 
-            next->prev->next = n.get();
-            next->prev = n.get();
+            next->prev->next = node.get();
+            next->prev = node.get();
 
-            n.release();
+            node.release();
             size_++;
         }
 
         void erase(ConstIterator where) noexcept {
-            const auto n = std::unique_ptr<ListNode>(where.currentNode_);
+            const auto node = std::unique_ptr<ListNode>(where.currentNode_);
 
-            n->prev->next = n->next;
-            n->next->prev = n->prev;
+            node->prev->next = node->next;
+            node->next->prev = node->prev;
             size_--;
         }
 
 
-        ListHeadNode makeListHead() noexcept {
+        auto makeListHead() noexcept -> ListHeadNode {
             const auto head = static_cast<ListNode*>(&head_);
             return { head, head };
         }

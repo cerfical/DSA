@@ -17,11 +17,14 @@ namespace dsa {
 
         /** @name Element insertion/retrieval */
         /** @{ */
-        const T& top() const noexcept {
+        [[nodiscard]]
+        auto top() const noexcept -> const T& {
             return data_.back();
         }
 
-        T& top() noexcept {
+
+        [[nodiscard]]
+        auto top() noexcept -> T& {
             return data_.back();
         }
 
@@ -30,11 +33,14 @@ namespace dsa {
             data_.push_back(value);
         }
 
+
         void push(T&& value) {
             data_.push_back(std::move(value));
         }
 
-        T pop() {
+
+        [[nodiscard]]
+        auto pop() noexcept -> T {
             auto value = std::move(data_.back());
             data_.pop_back();
             return value;
@@ -44,11 +50,14 @@ namespace dsa {
 
         /** @name Stack size */
         /** @{ */
-        std::size_t size() const noexcept {
+        [[nodiscard]]
+        auto size() const noexcept -> std::size_t {
             return data_.size();
         }
 
-        bool isEmpty() const noexcept {
+
+        [[nodiscard]]
+        auto isEmpty() const noexcept -> bool {
             return size() == 0;
         }
         /** @} */
