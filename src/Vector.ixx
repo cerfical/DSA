@@ -1,4 +1,4 @@
-#pragma once
+module;
 
 #include <algorithm>
 #include <cstddef>
@@ -6,9 +6,12 @@
 #include <memory>
 #include <type_traits>
 
+export module dsa:Vector;
+
+
 namespace dsa {
 
-    template <typename T>
+    export template <typename T>
     class Vector {
         using DataStorage = std::aligned_storage_t<sizeof(T), alignof(T)>[];
 

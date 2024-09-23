@@ -1,15 +1,18 @@
-#pragma once
+module;
 
 #include <cstddef>
 #include <initializer_list>
 #include <memory>
+
+export module dsa:List;
+
 
 namespace dsa {
 
     /**
      * @brief Implements a doubly linked list.
      */
-    template <typename T>
+    export template <typename T>
     class List {
         struct ListNode;
 

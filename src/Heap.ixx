@@ -1,54 +1,47 @@
-#pragma once
+module;
 
 #include <cstddef>
-#include <deque>
+#include <vector>
+
+export module dsa:Heap;
+
+import :heap_util;
+
 
 namespace dsa {
 
     /**
-     * @brief Implements a simple FIFO queue.
+     * @brief Implements a fast queue that gives priority to 'larger' elements first.
      */
-    template <typename T>
-    class Queue {
+    export template <typename T>
+    class Heap {
     public:
 
         /** @name Element insertion/retrieval */
         /** @{ */
-        const T& front() const noexcept {
+        const T& top() const noexcept {
             return data_.front();
         }
-
-        const T& back() const noexcept {
-            return data_.back();
-        }
-
-
-        T& front() noexcept {
-            return data_.front();
-        }
-
-        T& back() noexcept {
-            return data_.back();
-        }
-
 
         void push(const T& value) {
             data_.push_back(value);
+            heap_util::insertLast(data_);
         }
 
         void push(T&& value) {
             data_.push_back(std::move(value));
+            heap_util::insertLast(data_);
         }
 
         T pop() {
-            auto value = std::move(data_.front());
-            data_.pop_front();
+            auto value = heap_util::extractTop(data_);
+            data_.pop_back();
             return value;
         }
         /** @} */
 
 
-        /** @name Queue size */
+        /** @name Heap size */
         /** @{ */
         std::size_t size() const noexcept {
             return data_.size();
@@ -61,7 +54,7 @@ namespace dsa {
 
 
     private:
-        std::deque<T> data_;
+        std::vector<T> data_;
     };
 
 }

@@ -23,7 +23,7 @@ set(DOXYGEN_USE_MDFILE_AS_MAINPAGE "README.md")
 
 # Get the list of interface headers of the library
 get_target_property(DSA_LIB_HEADERS
-    dsa HEADER_SET
+    dsa CXX_MODULE_SET
 )
 
 doxygen_add_docs(dsa-docs "${DSA_LIB_HEADERS}" "../README.md"

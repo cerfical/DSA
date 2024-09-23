@@ -1,6 +1,6 @@
-#include <dsa/Stack.hpp>
-
 #include <catch2/catch_test_macros.hpp>
+
+import dsa;
 
 
 SCENARIO("manipulating stack elements", "[stack]") {

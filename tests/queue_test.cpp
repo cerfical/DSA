@@ -1,6 +1,5 @@
-#include <dsa/Queue.hpp>
-
 #include <catch2/catch_test_macros.hpp>
+import dsa;
 
 
 SCENARIO("manipulating queue elements", "[queue]") {

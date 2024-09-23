@@ -1,14 +1,17 @@
-#pragma once
+module;
 
 #include <cstddef>
 #include <deque>
+
+export module dsa:Stack;
+
 
 namespace dsa {
 
     /**
      * @brief Implements a simple LIFO stack.
      */
-    template <typename T>
+    export template <typename T>
     class Stack {
     public:
 

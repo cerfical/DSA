@@ -1,6 +1,6 @@
-#include <dsa/Vector.hpp>
-
 #include <catch2/catch_test_macros.hpp>
+
+import dsa;
 
 
 static constexpr const auto* VectorIteratorTags = "[vector][iterator]";

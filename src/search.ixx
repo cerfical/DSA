@@ -1,6 +1,9 @@
-#pragma once
+module;
 
 #include <ranges>
+
+export module dsa:search;
+
 
 namespace dsa {
 
@@ -9,7 +12,7 @@ namespace dsa {
     /**
      * @brief Performs an ordinary linear search on a range of values in @f$O(n)@f$ time.
      */
-    template <std::ranges::forward_range R, typename T>
+    export template <std::ranges::forward_range R, typename T>
     auto linearSearch(R&& range, T&& searchValue) {
         for(auto it = range.begin(); it != range.end(); it++) {
             if(*it == searchValue) {
@@ -23,7 +26,7 @@ namespace dsa {
     /**
      * @brief Performs an iterative binary search on a sorted range of values in @f$O(\lg n)@f$ time.
      */
-    template <std::ranges::forward_range R, typename T>
+    export template <std::ranges::forward_range R, typename T>
     auto binarySearch(R&& range, T&& searchValue) {
         auto left = range.begin();
         auto right = range.end();

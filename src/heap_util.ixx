@@ -1,9 +1,12 @@
-#pragma once
+module;
 
 #include <cstddef>
 #include <ranges>
 
-namespace dsa::heap {
+export module dsa:heap_util;
+
+
+namespace dsa::heap_util {
 
     inline std::size_t leftChildNode(std::size_t node) noexcept {
         return node * 2 + 1;

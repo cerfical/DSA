@@ -1,4 +1,4 @@
-﻿cmake_minimum_required(VERSION 3.23)
+﻿cmake_minimum_required(VERSION 3.28)
 
 
 project(DSA LANGUAGES CXX DESCRIPTION "Classic data structures and algorithms")
@@ -9,27 +9,29 @@ include(CTest)
 option(BUILD_DOCS "Generate documentation from the source tree using Doxygen" ON)
 
 
-add_library(dsa INTERFACE)
+add_library(dsa)
 
-target_sources(dsa INTERFACE FILE_SET HEADERS BASE_DIRS "include"
+target_sources(dsa PUBLIC FILE_SET CXX_MODULES
     FILES
-        "include/dsa/sort.hpp"
-        "include/dsa/search.hpp"
-        
-        "include/dsa/List.hpp"
-        "include/dsa/Vector.hpp"
-    
-        "include/dsa/Queue.hpp"
-        "include/dsa/Stack.hpp"
+        "src/dsa.ixx"
 
-        "include/dsa/heap_util.hpp"
-        "include/dsa/Heap.hpp"
+        "src/sort.ixx"
+        "src/search.ixx"
+        
+        "src/List.ixx"
+        "src/Vector.ixx"
+
+        "src/Queue.ixx"
+        "src/Stack.ixx"
+
+        "src/heap_util.ixx"
+        "src/Heap.ixx"
 )
 
 
 target_include_directories(dsa INTERFACE "include")
 
-target_compile_features(dsa INTERFACE cxx_std_20)
+target_compile_features(dsa PUBLIC cxx_std_20)
 
 
 if(BUILD_DOCS)

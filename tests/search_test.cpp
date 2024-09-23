@@ -1,10 +1,10 @@
-#include <dsa/search.hpp>
-
 #include <catch2/catch_template_test_macros.hpp>
 #include <catch2/catch_test_macros.hpp>
 
 #include <optional>
 #include <vector>
+
+import dsa;
 
 
 #define SEARCH_SCENARIO(testName) \

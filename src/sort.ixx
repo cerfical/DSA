@@ -1,10 +1,13 @@
-#pragma once
-
-#include "heap_util.hpp"
+module;
 
 #include <algorithm>
 #include <ranges>
 #include <vector>
+
+export module dsa:sort;
+
+import :heap_util;
+
 
 namespace dsa {
 
@@ -13,7 +16,7 @@ namespace dsa {
     /**
      * @brief Sorts a range of values in @f$O(n^2)@f$ time.
      */
-    template <std::ranges::random_access_range R>
+    export template <std::ranges::random_access_range R>
     void bubbleSort(R&& range) {
         for(auto it1 = range.end(); it1 != range.begin(); it1--) {
             bool sorted = true;
@@ -36,7 +39,7 @@ namespace dsa {
     /**
      * @brief Sorts a range of values in @f$O(n^2)@f$ time.
      */
-    template <std::ranges::random_access_range R>
+    export template <std::ranges::random_access_range R>
     void selectionSort(R&& range) {
         for(auto it = range.begin(); it != range.end(); it++) {
             std::iter_swap(it, std::min_element(it, range.end()));
@@ -47,7 +50,7 @@ namespace dsa {
     /**
      * @brief Sorts a range of values in @f$O(n^2)@f$ time.
      */
-    template <std::ranges::random_access_range R>
+    export template <std::ranges::random_access_range R>
     void insertionSort(R&& range) {
         for(auto it = range.begin(); it != range.end(); it++) {
             auto key = std::move(*it);
@@ -67,7 +70,7 @@ namespace dsa {
     /**
      * @brief Performs a recursive sort in @f$O(n * \lg n)@f$ time, using extra memory.
      */
-    template <std::ranges::random_access_range R>
+    export template <std::ranges::random_access_range R>
     void mergeSort(R&& range) {
         const auto size = std::ranges::size(range);
         if(size <= 1) {
@@ -108,7 +111,7 @@ namespace dsa {
     /**
      * @brief Performs a recursive in-place sort in @f$O(n * \lg n)@f$ time on average.
      */
-    template <std::ranges::random_access_range R>
+    export template <std::ranges::random_access_range R>
     void quickSort(R&& range) {
         const auto size = std::ranges::size(range);
         if(size < 2) {
@@ -145,15 +148,15 @@ namespace dsa {
     /**
      * @brief Performs an in-place sort in @f$O(n * \lg n)@f$.
      */
-    template <std::ranges::random_access_range R>
+    export template <std::ranges::random_access_range R>
     void heapSort(R&& range) {
-        heap::createHeap(range);
+        heap_util::createHeap(range);
 
         const auto heapStart = std::ranges::begin(range);
         auto heapEnd = std::ranges::end(range);
 
         while(heapEnd != heapStart) {
-            auto value = heap::extractTop(std::ranges::subrange(heapStart, heapEnd));
+            auto value = heap_util::extractTop(std::ranges::subrange(heapStart, heapEnd));
             heapEnd--;
 
             *heapEnd = std::move(value);

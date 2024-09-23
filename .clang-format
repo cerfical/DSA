@@ -100,12 +100,8 @@ RemoveSemicolon: true
 SortIncludes: CaseSensitive
 IncludeBlocks: Regroup
 IncludeCategories:
-  - { Regex: '".*"', Priority: 1 }
-  
-  # System includes
-    # Third party libraries
-  - { Regex: '<dsa/.*\.hpp>', Priority: 10 }
+  # Third party libraries
   - { Regex: '<.*(/.*|\.h|\.hpp)>', Priority: 11 }
 
-    # Standard library
+  # Standard library
   - { Regex: '<.*>', Priority: 20 }

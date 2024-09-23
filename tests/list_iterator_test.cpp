@@ -1,6 +1,6 @@
-#include <dsa/List.hpp>
-
 #include <catch2/catch_test_macros.hpp>
+
+import dsa;
 
 
 static constexpr const auto* ListIteratorTags = "[list][iterator]";
