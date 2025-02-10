@@ -3,7 +3,6 @@ module;
 #include <algorithm>
 #include <cstddef>
 #include <initializer_list>
-#include <iterator>
 #include <memory>
 #include <type_traits>
 
@@ -41,7 +40,7 @@ namespace dsa {
 
 
             auto operator++() noexcept -> ConstIterator& {
-                pos_ = std::next(pos_);
+                pos_++;
                 return *this;
             }
 
@@ -53,7 +52,7 @@ namespace dsa {
 
 
             auto operator--() noexcept -> ConstIterator& {
-                pos_ = std::prev(pos_);
+                pos_--;
                 return *this;
             }
 

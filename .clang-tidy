@@ -6,11 +6,12 @@ Checks:
   - modernize-*
   - performance-*
   - readability-*
-  - -misc-use-internal-linkage
+  - -cppcoreguidelines-avoid-c-arrays
   - -cppcoreguidelines-prefer-member-initializer
+  - -cppcoreguidelines-pro-bounds-pointer-arithmetic
   - -cppcoreguidelines-pro-type-const-cast
   - -cppcoreguidelines-pro-type-reinterpret-cast
-  - -cppcoreguidelines-avoid-c-arrays
+  - -misc-use-internal-linkage
   - -modernize-avoid-c-arrays
 
 CheckOptions:
